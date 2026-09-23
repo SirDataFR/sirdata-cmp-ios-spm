@@ -1,0 +1,433 @@
+===============================================================================
+                                   NOTICE
+                         Sirdata CMP Mobile SDK
+                      iOS ARTEFACTS (XCFramework / SPM)
+                               Sirdata SAS
+===============================================================================
+
+Product:        Sirdata CMP Mobile SDK — iOS
+Version:        1.2.0
+Publisher:      Sirdata SAS, 20 rue Saint-Fiacre, 75002 Paris, France
+Date of issue:  2026-09-04
+Distribution:   CocoaPods (SirDataCMP), Swift Package Manager
+                (SirDataFR/sirdata-cmp-ios-spm), npm
+                (@sirdata/react-native-cmp, ios/ directory)
+
+Copyright (c) 2024-2026 Sirdata SAS. All rights reserved.
+
+The Sirdata CMP Mobile SDK is proprietary software licensed under the terms
+set out in the accompanying LICENSE file. See LICENSE, and in particular
+Section 6 (Third-Party Components) and Section 26 (Pass-Through Obligations).
+
+This NOTICE file applies to the iOS artefacts only. The Android artefacts
+embed a different set of third-party components — including OkHttp, Okio and
+SLF4J, none of which are present here — and are covered by a separate NOTICE
+file (NOTICE-android).
+
+This NOTICE file is provided in satisfaction of the attribution obligations
+of Sections 4(a), 4(c) and 4(d) of the Apache License, Version 2.0, in
+respect of the third-party components statically linked into, or delivered
+alongside, these artefacts.
+
+The complete, unmodified text of the Apache License, Version 2.0 is
+distributed with this SDK at:
+
+    THIRD-PARTY-LICENSES/Apache-2.0.txt
+
+It is also available at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+
+STATIC LINKING — WHY THIS FILE MATTERS
+--------------------------------------
+The iOS artefact is a precompiled binary framework into which the components
+listed below are STATICALLY LINKED. Section 4 of the Apache License applies to
+distribution "in Source or Object form"; a compiled framework is an Object
+form within the meaning of Section 1 of that licence. The attribution
+obligations therefore apply in full, notwithstanding the absence of
+separately identifiable component files in the delivered artefact.
+
+
+SCOPE — IMPORTANT
+-----------------
+The Apache License applies ONLY to the third-party components identified
+below. It does NOT apply to the Sirdata CMP Mobile SDK itself, nor to any
+Sirdata-authored source code, binary, resource, configuration or
+documentation, which remain governed exclusively by the LICENSE file. This
+includes the Swift source files distributed through the Swift Package
+Manager, which are Sirdata-authored and proprietary.
+
+
+HOW THIS INVENTORY WAS ESTABLISHED
+----------------------------------
+The components listed below were obtained by resolving the Gradle
+configuration `iosArm64CompileKlibraries` of the `:shared` module at version
+1.2.0. Versions shown are the RESOLVED versions after Gradle conflict
+arbitration, not the declared versions. Where arbitration occurred it is
+noted in the entry.
+
+This inventory MUST be regenerated for every release, using:
+
+    ./gradlew :shared:dependencies \
+        --configuration iosArm64CompileKlibraries
+
+Note: the configuration is NOT named `iosArm64RuntimeClasspath`; Kotlin/Native
+targets do not expose JVM-style runtime classpath configurations.
+
+
+APACHE LICENSE DISCLAIMER (reproduced for convenience)
+------------------------------------------------------
+Unless required by applicable law or agreed to in writing, Licensor provides
+the Work (and each Contributor provides its Contributions) on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied, including, without limitation, any warranties or conditions of
+TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR
+PURPOSE. You are solely responsible for determining the appropriateness of
+using or redistributing the Work and assume any risks associated with Your
+exercise of permissions under the License.
+
+
+===============================================================================
+1. THIRD-PARTY COMPONENTS LICENSED UNDER THE APACHE LICENSE, VERSION 2.0
+===============================================================================
+
+-------------------------------------------------------------------------------
+[1] Ktor
+-------------------------------------------------------------------------------
+  Coordinates:      io.ktor:ktor-client-core
+                    io.ktor:ktor-client-darwin
+                    io.ktor:ktor-client-content-negotiation
+                    io.ktor:ktor-serialization
+                    io.ktor:ktor-serialization-kotlinx
+                    io.ktor:ktor-serialization-kotlinx-json
+                    io.ktor:ktor-events
+                    io.ktor:ktor-http
+                    io.ktor:ktor-io
+                    io.ktor:ktor-utils
+                    io.ktor:ktor-websockets
+                    io.ktor:ktor-websocket-serialization
+                    (and the corresponding -iosarm64 platform artefacts)
+  Version:          2.3.9
+  Copyright:        Copyright 2014-2026 JetBrains s.r.o. and contributors
+  Homepage:         https://ktor.io
+  Source:           https://github.com/ktorio/ktor
+  License:          Apache License, Version 2.0
+                    (THIRD-PARTY-LICENSES/Apache-2.0.txt)
+  Modified by Sirdata SAS:   NO
+  Upstream NOTICE file:      NONE FOUND
+  Note:             The HTTP engine on iOS is ktor-client-darwin, which relies
+                    on Apple's NSURLSession. Neither OkHttp nor Okio is
+                    present in these artefacts.
+
+-------------------------------------------------------------------------------
+[2] kotlinx.coroutines
+-------------------------------------------------------------------------------
+  Coordinates:      org.jetbrains.kotlinx:kotlinx-coroutines-core
+                    org.jetbrains.kotlinx:kotlinx-coroutines-core-iosarm64
+  Version:          1.8.0
+                    (declared directly by this project as 1.8.0; the ktor
+                     2.3.9 -iosarm64 modules request 1.7.1; Gradle conflict
+                     resolution selects the higher, 1.8.0)
+  Copyright:        Copyright 2016-2026 JetBrains s.r.o. and Kotlin
+                    Programming Language contributors
+  Homepage:         https://github.com/Kotlin/kotlinx.coroutines
+  Source:           https://github.com/Kotlin/kotlinx.coroutines
+  License:          Apache License, Version 2.0
+                    (THIRD-PARTY-LICENSES/Apache-2.0.txt)
+  Modified by Sirdata SAS:   NO
+  Upstream NOTICE file:      NONE FOUND
+
+-------------------------------------------------------------------------------
+[3] kotlinx.serialization
+-------------------------------------------------------------------------------
+  Coordinates:      org.jetbrains.kotlinx:kotlinx-serialization-core
+                    org.jetbrains.kotlinx:kotlinx-serialization-core-iosarm64
+                    org.jetbrains.kotlinx:kotlinx-serialization-json
+                    org.jetbrains.kotlinx:kotlinx-serialization-json-iosarm64
+  Version:          1.6.3
+                    (declared directly by this project as 1.6.3;
+                     io.ktor:ktor-serialization-kotlinx-iosarm64:2.3.9 and
+                     io.ktor:ktor-serialization-kotlinx-json-iosarm64:2.3.9
+                     request 1.5.1; Gradle conflict resolution selects the
+                     higher, 1.6.3)
+  Copyright:        Copyright 2017-2026 JetBrains s.r.o. and Kotlin
+                    Programming Language contributors
+  Homepage:         https://github.com/Kotlin/kotlinx.serialization
+  Source:           https://github.com/Kotlin/kotlinx.serialization
+  License:          Apache License, Version 2.0
+                    (THIRD-PARTY-LICENSES/Apache-2.0.txt)
+  Modified by Sirdata SAS:   NO
+  Upstream NOTICE file:      NONE FOUND
+
+-------------------------------------------------------------------------------
+[4] Kotlin Standard Library and Kotlin/Native Runtime
+-------------------------------------------------------------------------------
+  Coordinates:      org.jetbrains.kotlin:kotlin-stdlib
+                    Kotlin/Native runtime and standard library, statically
+                    linked into the framework by the Kotlin/Native compiler
+  Version:          1.9.22
+                    (aligned on the Kotlin 1.9.22 toolchain used to build this
+                     project; atomicfu-iosarm64 0.23.1 and
+                     kotlinx-coroutines-core-iosarm64 1.8.0 request 1.9.21;
+                     Gradle conflict resolution selects the higher, 1.9.22)
+  Copyright:        Copyright 2010-2026 JetBrains s.r.o. and Kotlin
+                    Programming Language contributors
+  Homepage:         https://kotlinlang.org
+  Source:           https://github.com/JetBrains/kotlin
+  License:          Apache License, Version 2.0
+                    (THIRD-PARTY-LICENSES/Apache-2.0.txt)
+                    NOTE: the Kotlin/Native distribution itself bundles
+                    further third-party components (libffi, mimalloc, utf8.h
+                    and others), listed in the upstream 'license/' directory
+                    of the Kotlin repository. Where any such component is
+                    linked into the delivered framework, its licence text MUST
+                    be added to THIRD-PARTY-LICENSES/ and an entry added to
+                    this file.
+                    VERIFIED on 2026-09-04 against the committed framework
+                    (ios/SirDataCMP/SirDataCMP.xcframework, both slices,
+                    Kotlin 1.9.22): exactly ONE such component is linked —
+                    utf8.h (UTF8-CPP), recorded as entry [6] below. mimalloc,
+                    libffi, libbacktrace, zlib, BoringSSL and libcurl are NOT
+                    linked (see Section 2).
+                    METHOD. The runtime is compiled with hidden symbol
+                    visibility, so `nm -gU` (GLOBAL symbols only) does not
+                    list its C++ symbols and an empty result from it proves
+                    nothing — this is how an earlier revision of this file
+                    came to state that no component was linked. The checks
+                    that do discriminate, per slice of the XCFramework:
+                      strings -n 5 <framework binary> \
+                        | grep -cE '__ZN4utf8|_mi_(malloc|heap)|_ffi_(call|prep_cif)\
+|_backtrace_(create_state|pcinfo)|inflateInit|OPENSSL_|curl_easy'
+                      strings -n 5 <framework binary> \
+                        | grep -iE 'libffi|mimalloc|Copyright.*(Anthony Green\
+|Microsoft|Daan Leijen|Nemanja Trifunovic)' | sort -u
+                    Expected on this version: `__ZN4utf8…` symbols present
+                    (utf8:: namespace of UTF8-CPP), every other pattern
+                    absent. Object-file names cannot be used instead: the
+                    framework binary is a single merged object.
+                    RE-RUN THESE COMMANDS whenever the Kotlin version
+                    changes: a later Kotlin/Native runtime may link components
+                    this one does not (the default allocator, in particular,
+                    has changed across Kotlin releases).
+  Modified by Sirdata SAS:   NO
+  Upstream NOTICE file:      NONE FOUND
+
+-------------------------------------------------------------------------------
+[5] kotlinx-atomicfu
+-------------------------------------------------------------------------------
+  Coordinates:      org.jetbrains.kotlinx:atomicfu
+                    org.jetbrains.kotlinx:atomicfu-iosarm64
+  Version:          0.23.1
+                    (requested as 0.19.0 by the ktor 2.3.9 -iosarm64 modules
+                     ktor-io, ktor-utils, ktor-http, ktor-events,
+                     ktor-client-core, ktor-client-darwin and the
+                     ktor-serialization-* modules; resolved upward to 0.23.1)
+  Copyright:        Copyright 2017-2026 JetBrains s.r.o. and Kotlin
+                    Programming Language contributors
+  Homepage:         https://github.com/Kotlin/kotlinx-atomicfu
+  Source:           https://github.com/Kotlin/kotlinx-atomicfu
+  License:          Apache License, Version 2.0
+                    (THIRD-PARTY-LICENSES/Apache-2.0.txt)
+  Modified by Sirdata SAS:   NO
+  Upstream NOTICE file:      NONE FOUND
+  Note:             Present as a resolved dependency on the Kotlin/Native
+                    target, where it is linked rather than fully inlined at
+                    compile time as it is on the JVM target.
+
+
+-------------------------------------------------------------------------------
+[6] UTF8-CPP (utf8.h) — part of the Kotlin/Native runtime
+-------------------------------------------------------------------------------
+  Component:        utf8.h / UTF8-CPP, a header-only UTF-8 library bundled
+                    in the Kotlin/Native runtime sources
+                    (kotlin-native/runtime/src/main/cpp/utf8.h) and listed
+                    in the upstream Kotlin 'license/' directory.
+  Copyright:        Copyright 2006 Nemanja Trifunovic
+  Homepage:         https://github.com/nemtrif/utfcpp
+  License:          Boost Software License, Version 1.0
+                    (THIRD-PARTY-LICENSES/BSL-1.0.txt)
+  Linked:           YES — statically, through the Kotlin/Native runtime
+                    (utf8:: namespace symbols present in both slices of the
+                    XCFramework; see entry [4], METHOD).
+  Modified by Sirdata SAS:   NO
+  Upstream NOTICE file:      NONE (the licence text is the only notice)
+  Note:             The Boost Software License waives its notice requirement
+                    for copies "solely in the form of machine-executable
+                    object code generated by a source language processor",
+                    which is the form in which this component is delivered
+                    here. This entry and the accompanying licence text are
+                    therefore provided for completeness and transparency,
+                    not because the licence compels it. Nothing here is
+                    stated in satisfaction of the Apache License, which does
+                    not apply to this component.
+
+===============================================================================
+2. COMPONENTS NOT PRESENT IN THESE ARTEFACTS
+===============================================================================
+
+The following components appear in the Android artefacts of this SDK and are
+listed here solely to record that they are NOT linked into, and NOT delivered
+with, the iOS artefacts. No attribution is due in respect of them for these
+artefacts.
+
+  - com.squareup.okhttp3:okhttp        (Android HTTP engine only)
+  - com.squareup.okio:okio             (reached through OkHttp)
+  - org.slf4j:slf4j-api           (via kotlinx-coroutines-slf4j, MIT)
+  - org.jetbrains:annotations          (JVM target only)
+
+The following components are bundled in the Kotlin/Native distribution but
+are NOT linked into these artefacts (verified 2026-09-04, see entry [4],
+METHOD): mimalloc (not the default allocator on this Kotlin version),
+libffi, libbacktrace (release builds use core symbolication), zlib,
+BoringSSL and libcurl (the HTTP engine is NSURLSession).
+
+The iOS HTTP engine is ktor-client-darwin, which uses Apple's NSURLSession.
+System frameworks provided by Apple are dynamically linked at runtime, are not
+redistributed by Sirdata, and are governed by the Apple Developer Program
+License Agreement rather than by this NOTICE.
+
+
+===============================================================================
+3. MODIFICATIONS TO THIRD-PARTY FILES (Apache License, Section 4(b))
+===============================================================================
+
+Section 4(b) of the Apache License, Version 2.0 requires that modified files
+carry prominent notices stating that the files were changed.
+
+DECLARATION
+-----------
+Sirdata SAS has NOT modified any file of any third-party component listed in
+Section 1 above. All such components are linked in their unmodified upstream
+form as obtained from their official distribution channels. No source file,
+resource, header, manifest or licence header of any third-party component has
+been altered, removed or replaced by Sirdata SAS.
+
+Compilation, static linking, symbol stripping, bitcode generation,
+architecture slicing and packaging into an XCFramework are mechanical
+transformations performed by the toolchain. They do not constitute a
+modification of any third-party file within the meaning of Section 4(b).
+
+ALTERNATIVE FORM — TO BE USED IF AND WHEN A MODIFICATION OCCURS
+---------------------------------------------------------------
+If, in a future release, Sirdata SAS modifies any third-party file, the
+declaration above MUST be replaced by the following form, and a prominent
+change notice MUST additionally be inserted at the head of each modified
+file:
+
+    The following files of [COMPONENT NAME], version [VERSION], have been
+    modified by Sirdata SAS:
+
+      - [relative/path/to/file]
+        Modified by Sirdata SAS on [YYYY-MM-DD].
+        Nature of the change: [DESCRIPTION].
+
+    All other files of that component are linked unmodified.
+
+
+===============================================================================
+4. REPRODUCTION OF UPSTREAM NOTICE FILES (Apache License, Section 4(d))
+===============================================================================
+
+Section 4(d) of the Apache License, Version 2.0 requires that, where a
+redistributed work includes a NOTICE file, the attribution notices contained
+in that file be reproduced in the derivative work.
+
+DECLARATION
+-----------
+At the date of issue stated above, no upstream NOTICE file has been
+identified in the distribution artefacts of the components listed in Section
+1. Accordingly no upstream attribution notice is reproduced below.
+
+This declaration MUST be re-verified before every publication. Kotlin/Native
+components are distributed as .klib archives; they can be inspected with:
+
+    unzip -l <component>.klib | grep -iE '(NOTICE|LICENSE)'
+
+Where an upstream NOTICE file exists, its content MUST be reproduced verbatim
+in the delimited template below. The content must not be summarised,
+translated, reformatted, abridged or merged.
+
+TEMPLATE FOR VERBATIM REPRODUCTION
+----------------------------------
+
+>>> BEGIN UPSTREAM NOTICE — [COMPONENT NAME] [VERSION] >>>
+[PASTE THE UNMODIFIED CONTENT OF THE UPSTREAM NOTICE FILE HERE,
+ BYTE FOR BYTE, WITHOUT ANY ALTERATION]
+<<< END UPSTREAM NOTICE — [COMPONENT NAME] [VERSION] <<<
+
+Repeat the delimited block above for each component that ships an upstream
+NOTICE file.
+
+
+===============================================================================
+5. TRADEMARKS AND NON-ENDORSEMENT (Apache License, Section 6)
+===============================================================================
+
+Section 6 of the Apache License, Version 2.0 does not grant permission to use
+the trade names, trademarks, service marks or product names of any licensor,
+except as required for reasonable and customary use in describing the origin
+of the work and reproducing the content of the NOTICE file.
+
+Accordingly:
+
+  - "Kotlin", "Kotlin/Native", "Ktor", "kotlinx" and "JetBrains" are trade
+    marks or registered trade marks of JetBrains s.r.o.
+  - "Apple", "iOS", "Xcode", "Swift", "App Store" and "NSURLSession" are trade
+    marks of Apple Inc.
+  - "CocoaPods" is a trade mark of its respective owner.
+  - "IAB", "IAB Europe", "Transparency and Consent Framework", "TCF",
+    "Global Privacy Platform" and "GPP" are trade marks or service marks of
+    IAB Technology Laboratory, Inc. and/or IAB Europe.
+  - "Sirdata" is a trade mark of Sirdata SAS.
+
+The names above are used solely to identify the origin of the corresponding
+components and to comply with attribution obligations. Their use does not
+imply any endorsement, sponsorship, certification, affiliation or approval of
+the Sirdata CMP Mobile SDK, or of Sirdata SAS, by the holders of those marks.
+All marks remain the property of their respective owners.
+
+Use of the Sirdata marks by licensees is governed by Section 16 of the
+LICENSE file.
+
+
+===============================================================================
+6. HOW TO REPORT A THIRD-PARTY ATTRIBUTION ISSUE
+===============================================================================
+
+Sirdata SAS is committed to complete and accurate attribution of the
+third-party components it redistributes.
+
+If you believe that a component is missing from this NOTICE, that a copyright
+line, licence identifier, version or source reference is inaccurate, that an
+upstream NOTICE file has not been reproduced as required by Section 4(d) of
+the Apache License, or that any other attribution obligation has not been
+met, please report it.
+
+Where to report:
+
+  Legal and licence compliance:   legal@sirdata.com
+  Technical and SBOM questions:   dev@sirdata.com
+  Postal address:                 Sirdata SAS, 20 rue Saint-Fiacre,
+                                  75002 Paris, France
+
+Please include, where available:
+
+  1. the name and version of the SDK artefact concerned, and the distribution
+     channel (CocoaPods, Swift Package Manager, npm);
+  2. the name, coordinates and version of the third-party component;
+  3. the licence concerned and a link to its authoritative text;
+  4. the exact attribution text you consider should appear;
+  5. any evidence of linking or redistribution, for example the output of
+     `nm -gU <framework binary>` showing the component's symbols.
+
+Sirdata SAS will acknowledge receipt within five (5) working days and will
+correct any confirmed omission or inaccuracy in the next release of the
+affected artefact. Artefacts already published to immutable registries cannot
+be withdrawn; see Section 23.4 of the LICENSE file.
+
+
+===============================================================================
+Sirdata SAS — 20 rue Saint-Fiacre, 75002 Paris, France
+Contact: dev@sirdata.com — Legal: legal@sirdata.com — https://sirdata.com
+===============================================================================

@@ -1,0 +1,1052 @@
+Sirdata CMP Mobile SDK — Proprietary Software Licence
+Version 1.1 — effective 2 September 2026
+Copyright (c) 2024-2026 Sirdata SAS. All rights reserved.
+
+
+===============================================================================
+PREAMBLE
+===============================================================================
+
+The Sirdata mobile consent management SDK, including its object code, the
+source files distributed with it, its documentation and accompanying
+materials (together, the "Software"), is the property of Sirdata SAS, a
+French societe par actions simplifiee ("Sirdata"). The Software is protected
+by copyright and by the rights of the producer of a database where
+applicable. The Software is licensed, not sold. Sirdata retains all rights
+not expressly granted.
+
+Sirdata publishes the Software on public package registries, including Maven
+Central, CocoaPods, npm and the Swift Package Manager. Publication makes the
+published artefacts publicly accessible; Sirdata makes no claim that those
+published artefacts are secret or confidential, and this Licence imposes no
+confidentiality obligation on them.
+
+Publication does not transfer ownership and does not make the Software open
+source. Nothing in this Preamble waives Sirdata's rights under Sections 2, 3
+and 4.
+
+Sirdata does claim, and takes reasonable steps to protect as trade secrets
+within the meaning of Articles L. 151-1 et seq. of the French Commercial
+Code, elements that are not published, including: server-side algorithms,
+scoring and vendor-resolution logic; restricted integration, architecture and
+support documentation made available under access control; API keys,
+credentials and endpoint configuration; customer configuration data;
+commercial terms; and product roadmap and unreleased developments (together,
+the "Sirdata Protected and Confidential Elements", as defined in Section 4).
+Those elements are disclosed only under access control or under a separate
+agreement, and remain subject to Section 4.
+
+
+===============================================================================
+1. ACCEPTANCE, LICENCE VERSION AND GRANT
+===============================================================================
+
+1.1 Licence version. This is the Sirdata CMP Mobile SDK Proprietary Licence,
+version 1.1, effective 2 September 2026. Each release of the Software is
+governed by the version of this Licence distributed with that release. A
+later version of this Licence does not apply retroactively to a release
+distributed under an earlier version.
+
+1.2 Acceptance. By downloading, installing, copying, extracting, linking,
+compiling or otherwise using the Software, or by instructing any package
+manager, build system, continuous-integration system or other tool to do so
+on your behalf, you accept this Licence and enter into a binding agreement
+with Sirdata. If you do not accept this Licence, you must not download,
+install or use the Software, and you must delete any copy in your possession.
+If you act for a legal entity, you represent that you are authorised to bind
+that entity, and "you" means that entity.
+
+1.3 Production grant. Where you hold a valid and current subscription to the
+Sirdata Consent Management Platform, Sirdata grants you, for the term of that
+subscription, a worldwide, non-exclusive, non-transferable and
+non-sublicensable right (except as expressly provided in Section 2) to:
+(a) download, install, store, reproduce and internally distribute the
+    Software within your organisation;
+(b) integrate the Software into your own mobile applications;
+(c) distribute the Software as embedded in those applications, in accordance
+    with Section 2;
+(d) use the accompanying documentation for those purposes,
+solely for the purpose of connecting your own applications to the Sirdata
+Consent Management Platform.
+
+1.4 Evaluation grant. Where you do not hold such a subscription, Sirdata
+grants you a worldwide, non-exclusive, non-transferable and non-sublicensable
+right to download, install, reproduce and use the Software for a period of
+ninety (90) days, solely for internal evaluation, development, testing and
+integration purposes. The evaluation grant does not include the right to
+distribute the Software or any application containing it to any third party
+or to any public application store, and does not include production use.
+
+1.5 Separate agreement. Where you and Sirdata have entered into a separate
+written agreement covering the Software, that agreement prevails over this
+Licence to the extent of any inconsistency, subject to Section 25. The
+absence of such an agreement does not deprive you of the rights granted in
+Sections 1.3 and 1.4, and does not deprive Sirdata of the benefit of any
+provision of this Licence.
+
+1.6 No implied rights. No right is granted other than as expressly stated in
+this Licence, whether by implication, estoppel or otherwise. All rights not
+expressly granted are reserved by Sirdata, as further set out in Section 12.
+
+1.7 No patent licence. No licence, immunity or other right is granted under
+any patent, utility model, or application for either, now or hereafter
+owned, controlled or acquired by Sirdata or by any entity that acquires
+Sirdata or the business to which the Software relates, whether expressly, by
+implication, by estoppel, by exhaustion or otherwise. This Section is
+without prejudice to any patent licence granted to you directly by a
+third-party licensor under section 3 of the Apache License, Version 2.0, in
+respect of the components identified in the NOTICE file applicable to your
+platform.
+
+
+===============================================================================
+2. EMBEDDED DISTRIBUTION
+===============================================================================
+
+2.1 Grant. Subject to Section 1.3 and to the conditions in Section 2.2, you
+may reproduce and distribute the Software, in object-code form only and as an
+integrated component of your own applications, to any number of end users,
+through public application stores (including the Apple App Store and Google
+Play), enterprise or private distribution channels, or your own distribution
+means.
+
+2.2 Conditions. The right in Section 2.1 applies only where all of the
+following are satisfied:
+(a) the Software is distributed solely as embedded in your application and is
+    not distributed on a stand-alone basis, as a software development kit, as
+    a library, as a package, or in any form from which a third party could
+    extract and reuse it independently of your application;
+(b) you do not expose, publish, document or otherwise make available any
+    interface, header, wrapper, adapter, build instruction or configuration
+    that is designed or marketed to enable a third party to use the Software
+    independently of your application;
+(c) your application provides material functionality of its own, beyond that
+    provided by the Software;
+(d) all copyright, trademark and other proprietary notices contained in or
+    accompanying the Software are preserved in your build and reproduced in
+    your application's legal notices, in accordance with Sections 6 and 26;
+(e) you use reasonable endeavours to ensure that your end-user terms
+    disclaim warranties and exclude the liability of Sirdata towards your end
+    users to the maximum extent permitted by the applicable law, and you
+    include such provisions at the next revision of those terms. Failure to
+    do so is not a breach of this Section 2.2 and does not affect your right
+    to distribute under Section 2.1; it is a matter between you and your end
+    users, and Section 2.2(f) applies; and
+(f) you remain solely responsible towards your end users for your application
+    as a whole.
+
+2.3 Development on behalf of a third party. Where you develop an application
+on behalf of an identified third party who will publish it under its own
+name, you may deliver the Software to that third party as embedded in that
+application, provided that (i) that third party accepts this Licence and
+holds its own subscription to the Sirdata Consent Management Platform, and
+(ii) you notify Sirdata of the identity of that third party upon request.
+
+2.4 Affiliates. You may exercise the rights granted in Sections 1.3 and 2.1
+through any entity that you control, that controls you, or that is under
+common control with you, provided that you remain jointly and severally
+liable for that entity's compliance with this Licence. "Control" means the
+direct or indirect ownership of more than fifty per cent (50%) of the voting
+rights of an entity.
+
+2.5 No other distribution. Except as expressly permitted in this Section 2,
+in Section 10.3 or by mandatory law, you may not publish, distribute,
+sublicense, sell, rent, lease, lend, host as a service, or otherwise make the
+Software available to any third party.
+
+
+===============================================================================
+3. TECHNICAL PROCESSING AND MODIFICATION
+===============================================================================
+
+3.1 Permitted technical processing. Notwithstanding Section 3.2, you may
+carry out the technical operations that are necessary to build, package,
+sign, optimise, distribute and update your application, including:
+compilation; static or dynamic linking; bundling; dead-code elimination;
+shrinking; minification; obfuscation and symbol renaming (including by means
+of R8, ProGuard, the Swift and LLVM toolchains and equivalent tooling);
+architecture slicing and app thinning; re-signing; packaging into an
+application bundle; and the generation of debug symbols and mapping files.
+Such operations do not constitute "modification" of the Software or the
+creation of a derivative work for the purposes of this Licence, provided that
+they do not alter the functional behaviour of the Software.
+
+3.2 Prohibited modification. Except as permitted by Section 3.1, by Section 5
+or by mandatory law, you may not modify, adapt, translate, patch, hook,
+swizzle, re-implement or create derivative works from the Software, nor
+disassemble or reverse engineer it. In particular, and without limitation,
+you may not:
+(a) alter, suppress, delay or simulate any consent signal, consent string,
+    preference record or user interface produced by the Software;
+(b) disable, bypass or interfere with any licence-control, authentication,
+    integrity, telemetry or version-check mechanism of the Software;
+(c) cause the Software to communicate with any back-end other than the
+    Sirdata Consent Management Platform for the purposes for which the
+    Software is designed.
+
+3.3 Interface layers. You may write and distribute your own wrapper, bridge
+or adapter code that calls the Software through its documented public
+interfaces, including for cross-platform frameworks. Such code is your
+property, is not a derivative work of the Software for the purposes of this
+Licence, and remains subject to Sections 2.2(a) and 2.2(b).
+
+3.4 Correction of errors. You must report to Sirdata any error affecting the
+operation of the Software and must not correct it yourself. Sirdata
+undertakes to make commercially reasonable efforts to correct reported errors
+within the framework of your subscription. Section 3.2 does not restrict any
+right you have under Article L. 122-6-1 of the French Intellectual Property
+Code, or under Articles 5 and 6 of Directive 2009/24/EC as implemented in
+your jurisdiction, to the extent that those rights cannot be excluded by
+agreement.
+
+
+===============================================================================
+4. USE OF SIRDATA PROTECTED AND CONFIDENTIAL ELEMENTS
+===============================================================================
+
+4.1 Restricted use. "Sirdata Protected and Confidential Elements" (also
+referred to as a "Sirdata Protected Element") means the elements identified
+in the Preamble, together with: the source code and object code of the
+Software; its internal algorithms, heuristics and decision logic; its data
+models and database structures; its implementations of consent signalling
+protocols; interface specifications that Sirdata has not published;
+documentation that Sirdata has not published, including restricted
+integration, architecture and support documentation made available under
+access control; and any other confidential information disclosed to You by
+Sirdata under access control or under a separate agreement. Published
+artefacts are excluded to the extent stated in the Preamble.
+
+You shall not use, and shall not permit any third party to use, any Sirdata
+Protected Element in order to design, develop, have developed, specify,
+benchmark for the purpose of replication, train or fine-tune any machine
+learning or artificial intelligence model on, or make available, whether
+directly or indirectly, any consent management platform, consent signalling
+library or software development kit, preference management product, or any
+other product or service that is substitutable for the Software or for the
+Sirdata Consent Management Platform. You shall protect the Sirdata Protected
+and Confidential Elements with at least the degree of care that You apply to
+Your own confidential information of equivalent importance, and in no event
+less than reasonable care, and shall disclose them only to those of Your
+personnel and contractors who need to know them for the purposes permitted by
+Sections 1.3 and 1.4 and who are bound by confidentiality obligations no less
+protective than this Section 4.
+
+4.2 What this Section does not restrict. Nothing in Section 4 prevents You
+from: (a) developing, marketing, distributing or operating any consent
+management platform or competing product or service, provided it is developed
+independently and without use of any Sirdata Protected Element;
+(b) determining freely Your own commercial, pricing and partnership policy;
+(c) exercising any right granted by mandatory law, including the acts
+referred to in Section 5 (Interoperability); (d) using information that is or
+becomes publicly available without breach of this Licence, that You lawfully
+held before disclosure by Sirdata, or that You lawfully obtain from a third
+party free of confidentiality obligations; (e) using general skills,
+knowledge and experience retained in the unaided memory of Your personnel.
+Sirdata bears the burden of proving that a Sirdata Protected Element was
+used.
+
+4.3 Duration. The obligations in Section 4.1 apply for the term of the
+Licence and for three (3) years after its expiry or termination. This time
+limit does not apply to elements that qualify as trade secrets under Articles
+L. 151-1 et seq. of the French Commercial Code, which remain protected for as
+long as they meet the statutory conditions.
+
+
+===============================================================================
+5. INTEROPERABILITY
+===============================================================================
+
+Nothing in Sections 2, 3 or 4 restricts any right you have under Articles 5
+and 6 of Directive 2009/24/EC of the European Parliament and of the Council,
+or under Article L. 122-6-1 of the French Intellectual Property Code, or
+under any equivalent mandatory provision of applicable law, including the
+right to decompile the Software to the extent necessary to achieve
+interoperability.
+
+
+===============================================================================
+6. THIRD-PARTY COMPONENTS
+===============================================================================
+
+The Software incorporates, and is distributed together with, software
+components owned by third parties and licensed under the Apache License,
+Version 2.0 (the "Apache License"). Those components are identified in the
+file NOTICE accompanying this distribution, and a verbatim copy of the Apache
+License is provided in the file THIRD-PARTY-LICENSES/Apache-2.0.txt
+accompanying this distribution.
+
+(a) Nothing in this Licence limits, and Sections 2, 3 and 4 shall not be
+construed as limiting, any right you have in respect of those third-party
+components under the Apache License or under any other license granted to you
+by the relevant third-party licensor. As between you and Sirdata, the Apache
+License governs your rights and obligations with respect to those components,
+and this Licence governs your rights and obligations with respect to every
+other part of the Software.
+
+(b) Sirdata makes no representation or warranty of any kind in respect of the
+third-party components, which are provided on an "AS IS" basis in accordance
+with the Apache License.
+
+(c) If you redistribute the Software or any part of it (including by
+distributing an application in which the Software is embedded), you are
+independently responsible for complying with the Apache License in respect of
+the third-party components, including its section 4. Sirdata provides the
+NOTICE file and the copy of the Apache License referred to above so that you
+may discharge that responsibility, and you must reproduce them, or the
+attribution notices they contain, with your own distribution.
+
+(d) No right is granted to you, whether expressly, by implication, by
+estoppel or otherwise, under any patent owned or controlled by Sirdata. This
+paragraph does not affect any patent license granted to you directly by a
+third-party licensor under section 3 of the Apache License in respect of that
+licensor's own contributions.
+
+(e) "Sirdata" and the Sirdata logo are trademarks of Sirdata SAS, as further
+set out in Section 16. The names and marks of the third-party licensors
+identified in the NOTICE file are the property of their respective owners and
+are used solely to identify the origin of their components. Nothing in this
+Licence or in the NOTICE file grants any right to use any of those names or
+marks, or indicates any affiliation with, sponsorship by, or endorsement by
+any of those owners.
+
+
+===============================================================================
+7. DISTRIBUTION CHANNELS
+===============================================================================
+
+7.1 Delivery only. The Software may be distributed through public package
+registries (including Maven Central, CocoaPods, npm and the Swift Package
+Manager) purely as a means of delivery. Availability through such a registry
+is not a grant of any right beyond those stated in Sections 1 and 2, and does
+not place the Software under any open-source license.
+
+7.2 Immutable registries. Certain registries, including Maven Central, are
+immutable and do not permit an artefact, once published, to be withdrawn. The
+continued availability of an artefact on such a registry is neither a grant
+or renewal of any right, nor a representation that the artefact is current,
+supported or fit for use, nor any undertaking by Sirdata to provide
+maintenance, corrections, security updates or support for it. Support and
+end-of-life are governed by Section 23.
+
+
+===============================================================================
+8. WARRANTY
+===============================================================================
+
+8.1 Limited warranty. Sirdata warrants that, for ninety (90) days from first
+download of a given release, the Software will operate in substantial
+conformity with its then-current published documentation, when used on a
+supported platform in accordance with that documentation.
+
+8.2 Sole remedy. Sirdata's sole obligation, and Your sole remedy, for breach
+of Section 8.1 is, at Sirdata's option, to correct the non-conformity,
+provide a workaround, or accept termination and refund the fees paid for the
+affected period.
+
+8.3 Exclusions. Sirdata does not warrant that the Software is error-free or
+uninterrupted, nor any commercial result, consent rate, revenue level,
+ranking, store approval, or outcome of any audit or regulatory review.
+Sirdata does not warrant the Software as modified by You, combined with
+components not supplied by Sirdata, or used contrary to the documentation.
+
+8.4 Mandatory warranties preserved. Nothing in this Section excludes or
+limits the warranty against hidden defects (Articles 1641 et seq. of the
+French Civil Code) or the warranty against eviction (Articles 1626 et seq.),
+including the warranty against Sirdata's own acts, which is of public policy
+under Article 1628 of the French Civil Code.
+
+8.5 Third-party infringement. Sirdata's undertakings in respect of
+third-party intellectual property claims are set out in Section 17.
+
+
+===============================================================================
+9. LIABILITY
+===============================================================================
+
+9.1 Cap. To the maximum extent permitted by applicable law, Sirdata's
+aggregate liability arising out of or in connection with the Software and
+this Licence is limited to the total amounts paid by You to Sirdata for the
+Software during the twelve (12) months preceding the event giving rise to
+liability.
+
+9.2 Floor. Where no amount has been paid (including evaluation use and use of
+freely available artefacts), that aggregate liability is limited to five
+thousand euros (EUR 5,000). The Parties acknowledge that this amount is not
+derisory and reflects the gratuitous nature of such use.
+
+9.3 Excluded heads of loss. Subject to Section 9.4, Sirdata is not liable for
+indirect or consequential loss, loss of profit, revenue, business, goodwill,
+anticipated savings, or loss or corruption of data.
+
+9.4 Carve-outs. Sections 9.1 to 9.3 do not apply to, and no limitation
+applies to, liability arising from: (a) fraud or wilful misconduct (dol);
+(b) gross negligence (faute lourde); (c) death or personal injury;
+(d) Sirdata's indemnity under Section 17, where granted, and the warranty
+against eviction; (e) Sirdata's own breach of Regulation (EU) 2016/679 in its
+capacity as controller or processor; and (f) any liability that cannot
+lawfully be limited.
+
+9.5 Your liability. You are liable for Your own use of the Software,
+including its configuration, the legal bases You rely on, the notices You
+display to end users, and Your compliance with applicable data protection and
+store rules, as further set out in Sections 14 and 15.
+
+
+===============================================================================
+10. TERM, TERMINATION AND SURVIVAL
+===============================================================================
+
+10.1 Termination for breach. Either Party may terminate this Licence if the
+other materially breaches it and fails to remedy the breach within thirty
+(30) days of a written notice identifying the breach. Immediate termination
+on written notice is available only for breach of Section 2 (Embedded
+Distribution), Section 4 (Use of Sirdata Protected and Confidential
+Elements), or unauthorised redistribution of the Software as a standalone
+product.
+
+10.2 Ordinary termination. Where the Software is supplied under a separate
+subscription agreement, this Licence ends when that subscription ends, in
+accordance with its own notice provisions. No automatic termination occurs
+without notice.
+
+10.3 Residual licence for distributed copies. Sirdata grants You and Your end
+users a perpetual, worldwide, irrevocable, royalty-free licence to continue
+running the copies of the Software already embedded in application versions
+distributed to end users before termination. This residual licence is limited
+to continued operation and to the corrective maintenance of those versions.
+It does not authorise new features, new integrations, or new server
+entitlements.
+
+10.4 Sell-off period. Application versions submitted to an application store
+for review before termination may complete review and be released, and remain
+covered by Section 10.3.
+
+10.5 No new distribution. After termination You must not publish any new
+application or new application version embedding the Software, except as
+permitted by Section 10.4, and must remove the Software from Your development
+and build environments.
+
+10.6 Continuity of end-user rights. The Parties acknowledge that end users
+must remain able to exercise their rights under Regulation (EU) 2016/679,
+including withdrawal of consent under Article 7(3), through the consent
+interface. For twelve (12) months from termination, Sirdata will continue to
+operate the minimum backend services required for consent display, consent
+withdrawal and signal storage for copies covered by Section 10.3, without
+charge. Before the end of that period, You must either migrate the affected
+application versions to another consent management solution or withdraw them
+from distribution. This Section does not apply where termination results from
+Your breach of Section 4, in which case Sirdata will nevertheless maintain
+withdrawal functionality for six (6) months.
+
+10.7 Survival. Sections 4, 6, 8.4, 9, 10.3 to 10.7, 11, 12, 13, 14, 16, 17,
+18, 20, 24 and 26, and the Preamble, survive termination.
+
+
+===============================================================================
+11. GOVERNING LAW AND JURISDICTION
+===============================================================================
+
+11.1 Governing law. This Licence, its formation, interpretation, performance
+and any non-contractual obligation arising out of or in connection with it,
+are governed by French law, to the exclusion of its conflict-of-laws rules
+and of the United Nations Convention on Contracts for the International Sale
+of Goods (Vienna, 11 April 1980).
+
+11.2 Consumer law reservation. Where You are a consumer habitually resident
+in a State whose law affords You mandatory protection under Article 6 of
+Regulation (EC) No 593/2008 (Rome I), Section 11.1 does not deprive You of
+the protection of the mandatory provisions of the law of that State.
+
+11.3 Business users. Where You act for purposes relating to Your trade,
+business, craft or profession, the courts of Paris, France have exclusive
+jurisdiction over any dispute arising out of or in connection with this
+Licence, including its existence, validity, performance or termination, and
+including non-contractual disputes, notwithstanding plurality of defendants,
+summary proceedings or third-party claims.
+
+11.4 Arbitration option for non-EU business users. Where You act for business
+purposes and are established outside the European Union and the European
+Economic Area, Sirdata may elect, by written notice given before or within
+thirty (30) days after service of proceedings, to have the dispute finally
+settled under the Rules of Arbitration of the International Chamber of
+Commerce by one (1) arbitrator appointed in accordance with those Rules. The
+seat of the arbitration is Paris, France, and the language of the
+arbitration is English. The award is final and binding on the Parties and
+may be enforced in any court of competent jurisdiction. Where that election
+is made, Section 11.3 does not apply to the dispute.
+
+11.5 Consumers. Where You are a consumer within the meaning of Article 17 of
+Regulation (EU) No 1215/2012, Sections 11.3 and 11.4 do not apply to You;
+jurisdiction is determined by Articles 17 to 19 of that Regulation, and
+Sirdata may bring proceedings against You only in the courts of the Member
+State in which You are domiciled. For the avoidance of doubt, downloading,
+integrating or distributing the Software within an application intended to be
+made available to the public is a professional purpose, and a person acting
+for that purpose is not a consumer.
+
+11.6 Interim relief. Notwithstanding Sections 11.3 to 11.5, either Party may
+apply to any court of competent jurisdiction for urgent, interim,
+conservatory or protective measures, including measures to protect
+intellectual property rights and trade secrets within the meaning of Articles
+L. 151-1 et seq. of the French Commercial Code, without such application
+constituting a waiver of Section 11.3 or of the arbitration option in Section
+11.4.
+
+
+===============================================================================
+12. OWNERSHIP AND RESERVATION OF RIGHTS
+===============================================================================
+
+12.1 Title. The Software, including all its components, source code, object
+code, binaries, interfaces, data structures, protocols, configuration
+schemas, documentation, sample code and any derivative works produced by
+Sirdata, is and remains the exclusive property of Sirdata SAS. Nothing in
+this Licence transfers any ownership right to the Licensee. All rights not
+expressly granted are reserved to Sirdata.
+
+12.2 Basis of protection. The Software is protected by the French
+Intellectual Property Code, in particular Articles L. 112-2 13°, L. 122-6 and
+L. 122-6-1, by Directive 2009/24/EC on the legal protection of computer
+programs, by international copyright treaties, and, where applicable, by the
+law of trade secrets (Articles L. 151-1 et seq. of the French Commercial
+Code) and by the law of unfair competition and parasitism. Sirdata does not
+represent that every individual element of the Software is protected by
+copyright; the licence granted in Section 1 and the restrictions in Section 4
+apply to the Software as a whole irrespective of the protection status of any
+individual element.
+
+12.3 Development. The Software was designed, specified, structured and
+validated by Sirdata. It was developed by Sirdata's employees acting within
+the scope of their duties, using such software development tools as Sirdata
+deems appropriate, including code-assistance tools. The selection,
+arrangement, architecture and parameterisation of the Software reflect the
+free and creative choices of those employees. Sirdata retains the records of
+the human design, selection, review and validation decisions embodied in the
+Software.
+
+12.4 No challenge. The Licensee shall not, directly or indirectly, challenge,
+contest or assist any third party in challenging Sirdata's ownership of, or
+rights in, the Software, nor file or prosecute any application for
+registration of any right over the Software or any element thereof. This
+Section is without prejudice to the rights the Licensee holds under Articles
+5 and 6 of Directive 2009/24/EC and their national implementing provisions,
+which may not be excluded by contract.
+
+12.5 Third-party components. The reservation of rights in this Section 12
+does not extend to the third-party components identified in Section 6 and in
+the NOTICE file, which remain the property of their respective holders and
+are licensed to the Licensee directly by those holders under their own terms.
+
+
+===============================================================================
+13. LANGUAGE
+===============================================================================
+
+13.1 Authentic version. The English-language version of this Licence is the
+sole authentic version and the sole version by which the parties are bound.
+It governs the interpretation and performance of this Licence.
+
+13.2 Courtesy translations. Sirdata may make translations of this Licence
+available for convenience only. Such translations have no legal effect. In
+the event of any divergence, inconsistency or ambiguity between the English
+version and any translation, the English version prevails.
+
+13.3 Availability on request. A copy of the authentic English version, and of
+any available translation, may be obtained free of charge on request
+addressed to legal@sirdata.com.
+
+13.4 Public sector licensees. Where the Licensee is a French public law
+entity or a private entity entrusted with a public service mission, and where
+Article 5 of Law no. 94-665 of 4 August 1994 relating to the use of the
+French language applies to the contractual relationship, Sirdata shall
+provide a French version of this Licence on request, and that French version
+shall be the version binding on that Licensee alone. In such case Section
+13.1 does not apply to that Licensee.
+
+13.5 Notices. Notices, requests and communications under this Licence may be
+given in English or in French. Sirdata may respond in either language.
+
+
+===============================================================================
+14. PERSONAL DATA
+===============================================================================
+
+14.1 Roles. In the operation of the Software within the Licensee's
+applications, the Licensee acts as controller within the meaning of Article
+4(7) of Regulation (EU) 2016/679 ("GDPR") in respect of the personal data
+processed through the Software. Sirdata acts as processor within the meaning
+of Article 4(8) and Article 28 GDPR when it processes such data on the
+Licensee's documented instructions. The parties acknowledge that they act as
+joint controllers within the meaning of Article 26 GDPR solely and strictly
+to the extent of the joint determination of the technical specifications and
+default parameters governing the generation, encoding and transmission of the
+TC String, the US Privacy String and the GPP String signals. That joint
+controllership is limited to those determinations and does not extend to any
+other processing operation.
+
+14.2 Data processing agreement. Before any use of the Software in production,
+the parties shall enter into a written data processing agreement ("DPA")
+meeting the requirements of Article 28(3) GDPR. In respect of personal data,
+the DPA prevails over this Licence to the extent of any inconsistency. In the
+absence of an executed DPA, the Licensee shall not process the personal data
+of natural persons through the Software in production. This restriction bears
+on production processing only: integration and testing against an actual
+Console configuration remain permitted under Sections 1.4 and 25.1.
+
+14.3 Minimum content of the DPA. The DPA shall specify at least:
+(a) the subject matter, nature, purpose and duration of the processing;
+(b) the categories of data subjects and the types of personal data
+    processed;
+(c) the documented instructions of the controller, and the obligation for
+    Sirdata to inform the Licensee where an instruction infringes applicable
+    data protection law;
+(d) the confidentiality undertakings of persons authorised to process the
+    data;
+(e) the technical and organisational security measures implemented pursuant
+    to Article 32 GDPR;
+(f) the conditions for engaging sub-processors, the list of approved
+    sub-processors and the procedure for notifying changes together with the
+    Licensee's right to object;
+(g) the assistance provided to the Licensee in responding to data subject
+    requests under Chapter III GDPR;
+(h) the assistance provided to the Licensee in respect of Articles 32 to 36
+    GDPR, including personal data breach notification without undue delay;
+(i) the arrangements for deletion or return of the personal data at the end
+    of the provision of services, and for deletion of existing copies unless
+    retention is required by Union or Member State law;
+(j) the arrangements for making available the information necessary to
+    demonstrate compliance with Article 28 GDPR and for allowing and
+    contributing to audits, and the conditions governing any transfer of
+    personal data to a third country, including the applicable transfer
+    mechanism.
+
+14.4 Local storage. The Software writes and reads consent signals and related
+technical parameters in the storage of the end user's terminal equipment. The
+Licensee is solely responsible for ensuring that the storing of, and access
+to, such information complies with Article 5(3) of Directive 2002/58/EC as
+transposed in each jurisdiction where its applications are made available,
+including as regards the collection of prior consent where required and the
+identification of any strictly necessary exemption relied upon.
+
+
+===============================================================================
+15. TCF, US PRIVACY AND GPP COMPLIANCE
+===============================================================================
+
+15.1 Framework compliance. The Software is designed to support the IAB Europe
+Transparency and Consent Framework version 2.2, the IAB US Privacy
+specification and the IAB Global Privacy Platform. The Licensee's use of the
+Software does not of itself confer on the Licensee any registration,
+certification, validation or membership status under those frameworks. The
+Licensee remains responsible for obtaining and maintaining any status,
+registration or authorisation required by the relevant framework operator.
+
+15.2 Licensee undertakings. The Licensee undertakes:
+(a) to configure and operate the Software in accordance with the applicable
+    framework policies, technical specifications and the terms of use of the
+    relevant framework operator;
+(b) not to alter, suppress, forge, pre-populate, override or otherwise
+    manipulate any consent signal, string or transparency disclosure produced
+    by the Software in a manner inconsistent with those policies or with
+    applicable law;
+(c) not to represent that a consent signal reflects a user choice that was
+    not in fact expressed by that user;
+(d) to maintain the integrity of the vendor list, purpose, special purpose,
+    feature and special feature disclosures as delivered by the Software,
+    save for configuration options expressly exposed by the Software;
+(e) to notify Sirdata without undue delay of any notice, complaint, audit
+    request or enforcement action received from a framework operator, an
+    industry body or a supervisory authority in connection with the Software.
+
+15.3 Suspension. Where the Licensee is in breach of Section 15.2, Sirdata may
+suspend the Licensee's access to the Software and to any related remote
+service after giving ten (10) working days' prior notice to remedy the
+breach. No prior notice is required where the breach is manifest or
+continuing, or where immediate suspension is required by a framework
+operator, a supervisory authority or applicable law.
+
+15.4 Framework changes. Framework policies and specifications are defined and
+amended by their respective operators and are outside Sirdata's control.
+Sirdata may modify the Software to reflect such changes. Sirdata gives no
+warranty that any version of the Software will remain compliant with a
+framework following a change adopted by its operator, and gives no warranty
+as to the continuity, availability or content of any framework.
+
+
+===============================================================================
+16. TRADE MARKS
+===============================================================================
+
+16.1 No general licence. This Licence grants no right to use the names, trade
+marks, service marks, logos, domain names, trade dress or other distinctive
+signs of Sirdata SAS, of any Sirdata group company, or of any third-party
+contributor, save as expressly permitted in Section 16.2.
+
+16.2 Permitted use. The Licensee may use the word mark "Sirdata" in plain
+text, without stylisation, solely to make a truthful and factual statement
+that its application integrates the Sirdata CMP Mobile SDK, and solely in
+technical documentation, credits screens, privacy notices, vendor disclosures
+and regulatory filings. Such use shall be accurate, shall not be more
+prominent than the Licensee's own marks, and shall not suggest endorsement,
+sponsorship, certification or affiliation.
+
+16.3 Restrictions. The Licensee shall not: (a) use any Sirdata mark in or as
+part of a product name, application name, company name, domain name, social
+media handle, keyword advertising term or metatag; (b) register or attempt to
+register any Sirdata mark or any confusingly similar sign in any jurisdiction
+or class; (c) alter, combine, animate, recolour or reproduce any Sirdata
+logo; (d) use any Sirdata mark in a manner that is disparaging, misleading or
+likely to dilute or tarnish it.
+
+16.4 Licensee marks. Sirdata may not use the Licensee's marks without the
+Licensee's prior written consent, save that Sirdata may list the Licensee's
+name and logo in a factual customer reference list. The Licensee may withdraw
+that permission at any time by written notice, and Sirdata shall cease such
+use within thirty (30) days of receipt.
+
+16.5 Goodwill. All goodwill arising from the use of the Sirdata marks accrues
+exclusively to Sirdata. The permission granted in Section 16.2 terminates
+automatically on termination of this Licence, subject to a sell-off period of
+ninety (90) days during which the Licensee may continue to distribute
+application versions already published and bearing a permitted reference.
+
+
+===============================================================================
+17. INTELLECTUAL PROPERTY INDEMNITY
+===============================================================================
+
+17.1 No indemnity. Sirdata gives no indemnity and assumes no defence
+obligation in respect of any claim that the Software infringes the
+intellectual property rights of a third party. The Software is provided on
+the basis set out in Section 8 (Warranty) and Section 9 (Liability).
+
+17.2 Separate agreement. An intellectual property indemnity, where required,
+must be agreed in a separate written agreement signed by both parties.
+Requests may be addressed to legal@sirdata.com.
+
+17.3 Third-party components. This Section is without prejudice to Section 6,
+which governs the third-party components identified in the NOTICE file
+applicable to your platform, and to any warranty, indemnity or disclaimer
+granted or made by their respective licensors.
+
+
+===============================================================================
+18. FEEDBACK AND CONTRIBUTIONS
+===============================================================================
+
+18.1 Feedback licence. Where the Licensee or any of its personnel provides
+Sirdata with suggestions, comments, bug reports, feature requests, benchmark
+results or other feedback relating to the Software ("Feedback"), the Licensee
+grants Sirdata a worldwide, perpetual, irrevocable, transferable,
+sub-licensable, royalty-free and non-exclusive licence to use, reproduce,
+adapt, publish and exploit that Feedback for any purpose, including the
+development, marketing and distribution of products and services, without
+attribution, accounting or compensation. The Licensee warrants that it holds
+the rights necessary to grant that licence.
+
+18.2 No obligation. Sirdata is under no obligation to review, respond to,
+implement or preserve any Feedback, and no confidentiality obligation
+attaches to Feedback unless the parties have agreed otherwise in writing
+before its disclosure.
+
+18.3 No third-party contributions. The Software is not open to external code
+contributions. Sirdata does not accept, and shall not be deemed to have
+accepted, any unsolicited submission of source code, patch, pull request or
+other copyrightable material. Any such submission is made at the sender's own
+risk and confers no right, claim or expectation of any kind. Sirdata may
+destroy any unsolicited submission without review.
+
+
+===============================================================================
+19. AUDIT
+===============================================================================
+
+19.1 Right. Sirdata may verify the Licensee's compliance with this Licence
+not more than once in any twelve (12) month period, on thirty (30) days'
+prior written notice, during normal business hours, in a manner that does not
+unreasonably disrupt the Licensee's operations. The verification may cover
+the identity and number of applications integrating the Software, the
+versions deployed, the distribution channels used and the configuration of
+the consent signals generated.
+
+19.2 Self-certification. Sirdata may, in place of an on-site verification,
+request a written self-certification signed by an authorised representative
+of the Licensee. The Licensee shall return that self-certification within
+thirty (30) days of the request. A complete and accurate self-certification
+discharges the Licensee for the period covered.
+
+19.3 Costs. Each party bears its own costs. Where the verification reveals an
+under-declaration or a non-compliant use exceeding five percent (5%) of the
+declared scope, the Licensee shall bear the reasonable costs of the
+verification and shall regularise its position, including by paying any
+additional fees due, within thirty (30) days.
+
+19.4 Confidentiality. Information obtained in the course of a verification is
+confidential, shall be used solely to assess compliance with this Licence and
+to enforce Sirdata's rights, and shall not be disclosed to third parties
+other than Sirdata's advisers bound by an equivalent duty of confidentiality.
+
+
+===============================================================================
+20. EXPORT CONTROL AND SANCTIONS
+===============================================================================
+
+20.1 Compliance. The Licensee shall comply with all export control, economic
+sanctions and restrictive measures laws applicable to its use, export,
+re-export, transfer and distribution of the Software, including Regulation
+(EU) 2021/821 setting up a Union regime for the control of exports,
+brokering, technical assistance, transit and transfer of dual-use items, the
+restrictive measures adopted under the Common Foreign and Security Policy of
+the European Union, the United States Export Administration Regulations (EAR)
+and the regulations administered by the Office of Foreign Assets Control
+(OFAC) of the United States Department of the Treasury.
+
+20.2 Restricted destinations and persons. The Licensee shall not make the
+Software available, directly or indirectly, to any person or entity
+designated on a list of sanctioned or restricted parties maintained by the
+European Union, the French Republic, the United States, the United Kingdom or
+the United Nations, nor to any person or entity located in, organised under
+the laws of, or ordinarily resident in a territory subject to comprehensive
+sanctions.
+
+20.3 Prohibited uses. The Licensee shall not use the Software in connection
+with the development, design, production or use of nuclear, chemical or
+biological weapons, missiles, or any other prohibited end-use under
+applicable export control law.
+
+20.4 Representation. The Licensee represents that it is not itself a
+designated person, that it is not owned or controlled by a designated person,
+and that it is not acting on behalf of a designated person. Breach of this
+Section 20 entitles Sirdata to terminate this Licence with immediate effect
+and without notice.
+
+
+===============================================================================
+21. ASSIGNMENT AND CHANGE OF CONTROL
+===============================================================================
+
+21.1 By Licensee. The Licensee may not assign, transfer, delegate, novate,
+charge, pledge or otherwise dispose of this Licence or any of its rights or
+obligations under it, in whole or in part, by operation of law or otherwise,
+without the prior written consent of Sirdata. Any purported disposal in
+breach of this Section is void.
+
+21.2 Intra-group. The Licensee may, on prior written notice to Sirdata and
+without Sirdata's consent, assign this Licence to an entity that it controls,
+that controls it, or that is under common control with it, provided that the
+assignee accepts in writing all obligations under this Licence and that the
+Licensee remains jointly and severally liable for their performance.
+
+21.3 By Sirdata. Sirdata may assign or transfer this Licence, in whole or in
+part, to any group company or to any successor in title to the business or
+assets to which this Licence relates, without the Licensee's consent, on
+written notice.
+
+21.4 Change of control. The Licensee shall notify Sirdata in writing within
+thirty (30) days of any change of control of the Licensee within the meaning
+of Article L. 233-3 of the French Commercial Code. Where control is acquired
+by a competitor of Sirdata, Sirdata may terminate this Licence on sixty (60)
+days' written notice given within ninety (90) days of receipt of that
+notification, without compensation and without prejudice to Section 10.
+
+
+===============================================================================
+22. FORCE MAJEURE
+===============================================================================
+
+22.1 Definition. Neither party is liable for any failure or delay in
+performing its obligations, other than an obligation to pay a sum of money,
+where that failure or delay results from an event of force majeure within the
+meaning of Article 1218 of the French Civil Code, being an event beyond the
+control of the debtor, which could not reasonably have been foreseen at the
+time of formation of the contract and whose effects could not be avoided by
+appropriate measures.
+
+22.2 Illustrations. Without limiting Section 22.1, the following are deemed
+to constitute events of force majeure where they meet the conditions of
+Article 1218 of the French Civil Code: failure, interruption or degradation
+of telecommunications networks, of hosting, cloud or content delivery
+infrastructure, or of a public package registry; the withdrawal, suspension,
+deprecation or unilateral modification of a technical framework, of a
+framework policy, of a vendor list, of an application store policy or of a
+platform requirement by its operator; and any act of a public authority or
+supervisory authority preventing performance.
+
+22.3 Effects. The affected party shall notify the other party without undue
+delay, describing the event and its anticipated duration, and shall use
+reasonable efforts to mitigate its effects. Performance is suspended for the
+duration of the impediment. Where the impediment persists for more than sixty
+(60) days, either party may terminate this Licence by written notice with
+immediate effect, without liability, and Section 10 applies to the
+consequences of that termination.
+
+
+===============================================================================
+23. VERSIONS, SUPPORT AND END OF LIFE
+===============================================================================
+
+23.1 Licence version. The version of this Licence applicable to a given
+release of the Software, and the rules governing changes to the licence text,
+are set out in Section 1.1. This Section 23 concerns only versions of the
+Software itself.
+
+23.2 Supported versions. Sirdata shall provide corrective maintenance for a
+major version of the Software for at least twelve (12) months following the
+general availability of the major version that replaces it. Outside that
+period, Sirdata has no obligation to correct defects, to issue security fixes
+or to ensure compatibility with any operating system, framework version or
+store requirement.
+
+23.3 Deprecation. Sirdata shall give at least six (6) months' prior notice
+before discontinuing a major version of the Software or a distribution
+channel, and at least three (3) months' prior notice before introducing a
+breaking change to a public interface. Notice may be given through the
+release notes, the public repository, the package registry metadata or a
+direct communication to the Licensee. Shorter notice, or no notice, may be
+given where a shorter period is required by law, by a competent authority, by
+an application store operator or by a framework operator, or where an
+immediate change is necessary to address a security vulnerability.
+
+23.4 Survival of published artefacts. Artefacts published to immutable public
+registries, including Maven Central, cannot be withdrawn once published. The
+continued availability of such an artefact does not constitute a grant of any
+right, a renewal of any licence, a representation as to fitness or
+compliance, or an undertaking to provide support, maintenance or security
+fixes for that artefact.
+
+
+===============================================================================
+24. GENERAL
+===============================================================================
+
+24.1 Entire agreement. This Licence, together with the NOTICE file, the
+THIRD-PARTY-LICENSES directory, and any signed commercial agreement and data
+processing agreement between the parties, constitutes the entire agreement
+between the parties in respect of its subject matter and supersedes all prior
+representations, proposals, communications and understandings, whether
+written or oral. Nothing in this Section excludes liability for fraud or for
+fraudulent misrepresentation.
+
+24.2 Severability. If any provision of this Licence is held to be invalid,
+unlawful or unenforceable by a court of competent jurisdiction, that
+provision shall be construed, to the extent possible, so as to give it the
+effect closest to the parties' original intention, or, failing that, shall be
+deemed severed. The remaining provisions continue in full force and effect.
+In particular, the invalidity of any limitation in Section 4 or Section 9
+shall not affect the validity of the licence grant in Section 1, the
+ownership reservation in Section 12, or any other provision.
+
+24.3 No waiver. No failure or delay by a party in exercising any right or
+remedy under this Licence constitutes a waiver of that or any other right or
+remedy. No single or partial exercise of a right or remedy prevents its
+further exercise. A waiver is effective only if given in writing and applies
+only to the instance and purpose for which it is given.
+
+24.4 Notices. Notices under this Licence shall be given in writing and sent
+to Sirdata SAS, 20 rue Saint-Fiacre, 75002 Paris, with a copy by electronic mail to
+legal@sirdata.com, and to the Licensee at the postal or electronic address
+last notified by it to Sirdata. A notice sent by electronic mail is deemed
+received on the first working day following transmission, absent notice of
+delivery failure. Technical communications may be addressed to
+dev@sirdata.com.
+
+24.5 Amendment. No amendment to this Licence is effective in respect of an
+existing signed agreement unless made in writing and signed by both parties.
+Sirdata may issue new versions of this Licence for future releases of the
+Software in accordance with Sections 1.1 and 25.3.
+
+24.6 No partnership. Nothing in this Licence creates a partnership, joint
+venture, agency, franchise or employment relationship between the parties.
+Neither party has authority to bind the other or to incur any obligation on
+its behalf.
+
+24.7 No third-party rights. This Licence does not create any right
+enforceable by any person who is not a party to it, save that the holders of
+rights in the third-party components identified in Section 6 and in the
+NOTICE file may enforce their own licence terms directly against the
+Licensee.
+
+
+===============================================================================
+25. PRECEDENCE AND UPGRADE
+===============================================================================
+
+25.1 What entitles you to production use. Production use — meaning any use of
+the Software in an application distributed, published or otherwise made
+available to end users, whether or not for consideration — requires a valid
+and current subscription to the Sirdata Consent Management Platform, and is
+governed by Section 1.3. A subscription taken through the Sirdata Console is
+sufficient: no separately signed commercial agreement is required. Where you
+hold no such subscription, your rights are those of the evaluation grant in
+Section 1.4 — internal evaluation, development, testing and integration, with
+no distribution to any third party or public application store. Nothing in
+this Section restricts the use of real configuration data during evaluation:
+a consent management platform can only be integrated against an actual
+configuration. Subscriptions: https://sirdata.com — questions:
+legal@sirdata.com.
+
+25.2 Precedence. A separately signed commercial agreement is optional and is
+not a condition of production use. Where such an agreement is nevertheless in
+place and covers the Software, it prevails over this Licence to the extent of
+any inconsistency. The following provisions of this Licence nevertheless
+continue to apply and are not displaced unless the signed agreement expressly
+states otherwise by reference to the relevant section: Section 12 (Ownership),
+Section 6 (Third-Party Components) and Section 13 (Language). In respect of
+personal data, the data processing agreement prevails in accordance with
+Section 14.2.
+
+25.3 Automatic upgrade. Where the parties execute a commercial agreement
+covering the Software after the Licensee has begun using it under this
+Licence, that agreement applies from its effective date to all use of the
+Software, including use of copies obtained before that date, unless the
+agreement provides otherwise.
+
+25.4 Reversion. On expiry or termination of your subscription, or of any
+signed commercial agreement, without renewal, your rights revert to the
+evaluation grant in Section 1.4 and production use shall cease for new
+releases, subject to Section 10.3 (residual licence for copies already
+distributed), Section 10.4 (sell-off) and Section 10.6 (continuity of
+end-user rights).
+
+
+===============================================================================
+26. PASS-THROUGH OBLIGATIONS
+===============================================================================
+
+26.1 Obligations on distribution. Where the Licensee distributes, publishes
+or otherwise makes available an application or a software development kit
+incorporating the Software, the Licensee shall:
+(a) not purport to grant to any recipient any right in the Software broader
+    than the rights the Licensee holds under this Licence, and not restrict
+    any right that a recipient holds directly under a third-party licence or
+    under a mandatory provision of law, including Articles 5 and 6 of
+    Directive 2009/24/EC and the interoperability provisions referred to in
+    Section 5;
+(b) reproduce and make available to each recipient the NOTICE file, the full
+    text of the Apache License, Version 2.0, and any other third-party
+    licence text delivered with the Software, in a manner readily accessible
+    to that recipient, including where the Software is embedded in a compiled
+    or linked binary artefact;
+(c) not remove, obscure, alter or replace any copyright notice, attribution
+    notice, licence header, licence identifier or NOTICE content contained in
+    or delivered with the Software or its third-party components;
+(d) ensure that the recipient's use of the Software is subject to terms at
+    least as protective of Sirdata's rights as this Licence, and remain fully
+    responsible to Sirdata for the acts and omissions of that recipient.
+
+26.2 Onward distribution. The obligations in Section 26.1 apply to each
+successive recipient in the distribution chain. The Licensee shall impose
+them on its own distributors, integrators, resellers and affiliates by
+written terms, and shall procure their compliance.
+
+26.3 Relationship with third-party terms. Nothing in this Section 26
+restricts, conditions or overrides the rights that a recipient holds directly
+from the licensors of the third-party components identified in Section 6 and
+in the NOTICE file. The Licensee's compliance with this Section 26 does not
+relieve it of its own obligations under those third-party licences.
+
+
+===============================================================================
+Sirdata SAS — 20 rue Saint-Fiacre, 75002 Paris — Contact: dev@sirdata.com —
+Legal: legal@sirdata.com — https://sirdata.com
+===============================================================================

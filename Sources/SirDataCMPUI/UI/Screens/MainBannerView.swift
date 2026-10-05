@@ -55,6 +55,63 @@ struct MainBannerView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            // No-consent action resolved once, here, because two places render it: the
+            // footer (button and link styles) and the top of the card (close style).
+            // GAP-M06: MainApply workflow — use BUTTONS_APPLY instead of
+            // BUTTONS_ACCEPT_ALL, and BUTTONS_DO_NOT_APPLY for the no-consent
+            // button (web parity: MainApply.jsx).
+            // APPLY_CHOICES force REJECT au même titre que MANUAL_DISPLAY : le libellé
+            // passait bien à BUTTONS_DO_NOT_APPLY mais l'action restait dérivée du thème,
+            // donc « Ne pas appliquer » APPLIQUAIT les modifications en attente dès que
+            // theme.noConsentButton valait CONTINUE ou ASK_LATER, sans jamais atteindre
+            // la branche discardPendingChanges() de ConsentView. Parité ConsentActivity.
+            // En réouverture (MANUAL_DISPLAY), le web force REJECT quel que soit le type configuré,
+            // même NONE, et `FooterMain.jsx` le rend en bouton quel que soit le style : on peut
+            // toujours retirer son consentement. Le style « lien » ou « close » ne s'applique donc
+            // pas en réouverture. Parité Android (`ConsentActivity`, `MainBanner`).
+            let isManualDisplay = uiState.workflow == .manualDisplay
+            let isApplyWorkflow = uiState.workflow == .applyChoices
+            let btnType: ThemeNoConsentButton =
+                (isManualDisplay || isApplyWorkflow) ? .reject : theme.noConsentButton
+            let noConsentLabel: String? = {
+                if isManualDisplay {
+                    return btnType.resolveLabel(localize)
+                }
+                // FRONT-1319 — hors réouverture, `NONE` se teste sur `theme.noConsentButton` et
+                // non sur `btnType` : le forçage à `.reject` ci-dessus a déjà privé ce dernier
+                // de la valeur `none`, donc `resolveLabel` ne peut plus répondre. Sans ce test,
+                // le mode « appliquer les choix » rendait « Ne pas appliquer » alors que
+                // l'éditeur a explicitement désactivé le bouton de refus, là où le web tient
+                // les deux dans la même condition (`MainApply.getNoConsentButton()`).
+                // `ThemeNoConsentButton.none` est écrit en ENTIER : `.none` se résoudrait
+                // contre `Optional` dans ce contexte optionnel, pas contre l'enum.
+                if theme.noConsentButton == ThemeNoConsentButton.none {
+                    return nil
+                }
+                if isApplyWorkflow {
+                    return localize.getText(key: LocaleKey.buttonsDoNotApply.key)
+                }
+                return btnType.resolveLabel(localize)
+            }()
+            let noConsentAction: () -> Void = {
+                if btnType == ThemeNoConsentButton.continue_ {
+                    return onContinueWithoutConsent ?? onFinish
+                } else if btnType == ThemeNoConsentButton.askLater {
+                    return onAskLater ?? onFinish
+                } else {
+                    return onRejectAll
+                }
+            }()
+            // Style « lien » : un lien pleine largeur sous les boutons. Le web le place sous le
+            // texte, au-dessus des boutons : écart de mise en page connu, non traité ici.
+            let noConsentAsLink = !isManualDisplay && theme.noConsentButtonStyle == .link
+            let noConsentAsClose = !isManualDisplay && theme.noConsentButtonStyle == .close
+            // Style « close » : le web n'affiche PAS de croix. Il affiche le LIBELLÉ du bouton de
+            // refus (« Tout refuser », « Continuer sans accepter »…) en lien, épinglé dans le coin
+            // haut de la bannière (`NoConsentButton.jsx`, `no-consent-button.module.less`). Il prend
+            // la place de la croix de fermeture, qui n'est alors pas affichée.
+            let closeStyleLabel: String? = noConsentAsClose ? noConsentLabel : nil
+
             // Scrollable content: header, title, descriptions, text blocks.
             // Allows long banner texts to be read in full without truncation.
             // The ScrollView is capped at `contentHeight` (ideal height) so it
@@ -66,8 +123,14 @@ struct MainBannerView: View {
                     HStack(alignment: .center) {
                         CmpLogo(height: 36)
                         Spacer()
+                        if let closeStyleLabel {
+                            // Place réservée sous le lien épinglé plus bas (le « masque » du web) :
+                            // sans elle, le titre passerait sous le lien quand il n'y a pas de logo.
+                            NoConsentCloseLink(label: closeStyleLabel, action: {})
+                                .hidden()
+                                .accessibilityHidden(true)
                         // GAP-M14: Hide close button in cookiewallModify workflow (web parity).
-                        if (theme.closeButton || uiState.workflow == .manualDisplay) && uiState.workflow != .cookiewallModify {
+                        } else if (theme.closeButton || isManualDisplay) && uiState.workflow != .cookiewallModify {
                             // CNIL variant parity: closing the banner counts as an explicit
                             // choice and must persist consent (web CMP handleClose behavior).
                             // Otherwise the close button simply dismisses the UI.
@@ -199,6 +262,15 @@ struct MainBannerView: View {
             }
             .frame(height: contentHeight > 0 ? min(contentHeight, max(0, maxHeight - footerHeight)) : nil)
             .frame(maxHeight: max(0, maxHeight - footerHeight))
+            // Le lien de refus en style « close », HORS du défilement : le texte passe dessous et
+            // il reste visible, comme le pied de page (CNIL : refuser aussi facilement qu'accepter).
+            .overlay(alignment: .topTrailing) {
+                if let closeStyleLabel {
+                    NoConsentCloseLink(label: closeStyleLabel, action: noConsentAction)
+                        .padding(.top, 20)
+                        .padding(.trailing, 20)
+                }
+            }
 
             // Fixed footer: primary decision buttons, set choices link, watermark.
             // Stays visible and tappable regardless of scroll position.
@@ -206,56 +278,6 @@ struct MainBannerView: View {
                 // Primary decision row — Accept and the no-consent button share the
                 // same width and visual level (CNIL: refusing must be as easy as
                 // accepting).
-                // No-consent action resolved once and reused whether it is rendered
-                // inline in the decision row or as a full-width link below it.
-                // Manual display workflow forces a REJECT no-consent button
-                // regardless of the configured theme value (web parity: Main.jsx).
-                // GAP-M06: MainApply workflow — use BUTTONS_APPLY instead of
-                // BUTTONS_ACCEPT_ALL, and BUTTONS_DO_NOT_APPLY for the no-consent
-                // button (web parity: MainApply.jsx).
-                // APPLY_CHOICES force REJECT au même titre que MANUAL_DISPLAY : le libellé
-                // passait bien à BUTTONS_DO_NOT_APPLY mais l'action restait dérivée du thème,
-                // donc « Ne pas appliquer » APPLIQUAIT les modifications en attente dès que
-                // theme.noConsentButton valait CONTINUE ou ASK_LATER, sans jamais atteindre
-                // la branche discardPendingChanges() de ConsentView. Parité ConsentActivity.
-                let isApplyWorkflow = uiState.workflow == .applyChoices
-                let btnType: ThemeNoConsentButton =
-                    (uiState.workflow == .manualDisplay || isApplyWorkflow) ? .reject : theme.noConsentButton
-                let noConsentLabel: String? = {
-                    // GAP-B03: In MANUAL_DISPLAY, hide the reject/no-consent button
-                    // (web parity: Main.jsx — only close button is shown).
-                    // FRONT-1319 — `NONE` se teste ici, en tête, et sur `theme.noConsentButton` et
-                    // non sur `btnType` : le forçage à `.reject` ci-dessus a déjà privé ce dernier
-                    // de la valeur `none`, donc `resolveLabel` ne peut plus répondre. Sans ce test,
-                    // le mode « appliquer les choix » rendait « Ne pas appliquer » alors que
-                    // l'éditeur a explicitement désactivé le bouton de refus, là où le web tient
-                    // les deux dans la même condition (`MainApply.getNoConsentButton()`).
-                    // `ThemeNoConsentButton.none` est écrit en ENTIER : `.none` se résoudrait
-                    // contre `Optional` dans ce contexte optionnel, pas contre l'enum.
-                    if uiState.workflow == .manualDisplay
-                        || theme.noConsentButton == ThemeNoConsentButton.none {
-                        return nil
-                    }
-                    if isApplyWorkflow {
-                        return localize.getText(key: LocaleKey.buttonsDoNotApply.key)
-                    }
-                    return btnType.resolveLabel(localize)
-                }()
-                let noConsentAction: () -> Void = {
-                    if btnType == ThemeNoConsentButton.continue_ {
-                        return onContinueWithoutConsent ?? onFinish
-                    } else if btnType == ThemeNoConsentButton.askLater {
-                        return onAskLater ?? onFinish
-                    } else {
-                        return onRejectAll
-                    }
-                }()
-                // Web CMP parity: when noConsentButtonStyle == .link, the no-consent
-                // action renders as a full-width text link below the main buttons
-                // rather than as a button in the primary decision row.
-                let noConsentAsLink = theme.noConsentButtonStyle == .link
-                let noConsentAsClose = theme.noConsentButtonStyle == .close
-
                 let acceptLabel = isApplyWorkflow
                     ? localize.getText(key: LocaleKey.buttonsApply.key)
                     : localize.getText(key: LocaleKey.buttonsAccept.key)
@@ -273,13 +295,16 @@ struct MainBannerView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 63)
 
-                    // No-consent button rendered inline (button styles only).
+                    // No-consent button rendered inline: the two « big button » styles, and every
+                    // style in MANUAL_DISPLAY (`FooterMain.jsx`). `isPrimary: true` : en « Big
+                    // button (main color) », le web lui donne la classe d'« Accepter »
+                    // (`btnPrimary`), pas une variante atténuée.
                     if let noConsentLabel, !noConsentAsLink, !noConsentAsClose {
                         BannerButton(
                             label: noConsentLabel,
                             action: noConsentAction,
                             style: theme.noConsentButtonStyle.consentButtonStyle,
-                            isPrimary: false
+                            isPrimary: true
                         )
                         .frame(maxWidth: .infinity)
                         .frame(height: 63)
@@ -299,16 +324,7 @@ struct MainBannerView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, 4)
                 }
-                // No-consent action rendered as a close (X) button when the
-                // configured style is .close.
-                if let noConsentLabel, noConsentAsClose {
-                    Button(action: noConsentAction) {
-                        Image(systemName: "xmark")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                    }
-                    .accessibilityLabel(noConsentLabel)
-                }
+                // Style « close » : rendu en haut de la carte (cf. `closeStyleLabel`), jamais ici.
 
                 // Customize / Set choices — full width, secondary level
                 let setChoicesLabel = localize.getText(key: LocaleKey.buttonsSetChoices.key)
@@ -358,9 +374,42 @@ struct MainBannerView: View {
     }
 }
 
+/// Le bouton de refus en style « close » : son libellé en lien, sur une ligne, sur le fond de
+/// la carte pour masquer le texte qui défile dessous. Couleurs et graisse du style « link »
+/// (`ConsentButton`), mais à sa largeur naturelle : le web écrit `white-space: nowrap; width: auto`.
+private struct NoConsentCloseLink: View {
+    let label: String
+    let action: () -> Void
+
+    @Environment(\.cmpResolvedTheme) private var theme
+
+    var body: some View {
+        Button(action: action) {
+            Text(label)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(theme.main)
+                .lineLimit(1)
+                .fixedSize()
+                .padding(.horizontal, 6)
+                .frame(minHeight: 36)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        // Le fond est posé sur le bouton et NON dans son libellé : le style `.plain` pâlit le
+        // libellé pendant l'appui, et un fond pâli laisserait voir le texte qui défile dessous.
+        .background(theme.background)
+        .clipShape(RoundedRectangle(cornerRadius: theme.cornerRadius / 2))
+        .accessibilityLabel(label)
+    }
+}
+
 /// Renders banner text with optional clickable links built from structured segments.
 /// Falls back to plain `Text` when no segments are available.
-private struct BannerTextView: View {
+/// Text with its inline links — `vendors`, `purposes`, `hostnames`, `websites`, `utiq`.
+/// Shared by the banner and, since FRONT-1409, the purposes and partners screens, so
+/// that « voir les sites » and its `ui:sites` click exist wherever the web has them.
+struct BannerTextView: View {
     let segments: [(text: String, linkType: String?)]
     let fallback: String
     let theme: ResolvedTheme

@@ -588,7 +588,7 @@ extension String {
     func processClassnameTagsStructured(
         setChoicesStyle: ThemeSetChoicesStyle = .button
     ) -> [(text: String, linkType: String?)] {
-        var input = self
+        let input = self
         let tagToLink: [String: String] = [
             "vendors": "VENDORS",
             "purposes": "PURPOSES",
@@ -751,10 +751,13 @@ struct IllustrationPopup: View {
     }
 }
 
-// MARK: - iOS 14 availability shims
+// MARK: - Availability shims
 //
-// The SDK ships with an iOS 14 deployment target; these wrappers apply
-// newer SwiftUI modifiers only where available, with sensible fallbacks.
+// The sources target iOS 15.0, the minimum of every channel since 2.0.0.
+// `cmpPresentationDetents` applies an iOS 16 modifier only where available.
+// `cmpTint` and `cmpNoAutocapitalization` predate that minimum: their iOS 15
+// branch is now always taken, and the fallbacks are kept only to leave call
+// sites untouched.
 
 extension View {
     /// `presentationDetents` shim — no-op below iOS 16 (sheets stay full-height).

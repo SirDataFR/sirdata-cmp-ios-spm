@@ -24,10 +24,11 @@ struct VendorsView: View {
     /// T-V11 (GAP-V16): Close action. In CNIL mode, saves consent before closing.
     /// Non-CNIL: simply dismisses the UI without saving.
     let onClose: () -> Void
+    /// FRONT-1409 — the `ui:sites` click of the « voir les sites » link of the scope reminder.
+    var onUiClick: ((UserActionUi) -> Void)? = nil
 
     @State private var searchQuery = ""
     @State private var showHelp = false
-    @State private var showHostnames = false
     @Environment(\.cmpResolvedTheme) private var theme
 
     var body: some View {
@@ -96,17 +97,6 @@ struct VendorsView: View {
             footer
         }
         .background(theme.background.ignoresSafeArea())
-        // Same sheet as the banner and the purposes screen — it was duplicated
-        // inline here, which is how it missed the HTML rendering of
-        // `hostnames.description` (its `<br/>` showed up verbatim).
-        .sheet(isPresented: $showHostnames) {
-            HostnamesSheet(
-                hostnames: uiState.hostnames,
-                utiqNoticeUrl: nil,
-                localize: localize,
-                theme: theme
-            )
-        }
     }
 
     // MARK: - Help (GAP-016)
@@ -181,16 +171,6 @@ struct VendorsView: View {
             // classname tags (<hostnames>...</hostnames>), and strip remaining HTML — web parity:
             // VendorScope.jsx applies buildText(text) then renders as HTML.
             let rawScope = localize.getText(key: uiState.scopeReminderKey)
-            // FRONT-1286 — le tap n'est offert que si le texte BRUT porte un marqueur de
-            // lien : `<hostnames>` en portée GROUP, `<websites>` en portée PROVIDER. Il
-            // l'était dès que le texte n'était pas vide, sans rien regarder — donc en portée
-            // APP, taper « vos choix ne s'appliquent qu'à cette application » ouvrait une
-            // liste de sites web, soit exactement ce que la phrase vient de nier.
-            //
-            // Gater sur le seul `<hostnames>` aurait retiré à PROVIDER un accès qu'elle avait
-            // (relevé par Codex). Lu avant le pipeline, qui résout et retire les balises.
-            let scopeOpensHostnames =
-                rawScope.contains("<hostnames>") || rawScope.contains("<websites>")
             let scope = rawScope
                 .processDescriptionPipeline(
                     localize: localize,
@@ -215,12 +195,20 @@ struct VendorsView: View {
                     setChoicesStyle: uiState.choicesStyle
                 )
             if !scope.isEmpty {
-                Text(scope)
-                    .font(.subheadline)
-                    .foregroundColor(theme.main)
-                    .onTapGesture {
-                        if scopeOpensHostnames { showHostnames = true }
-                    }
+                // FRONT-1409 — web parity (`VendorScope.jsx`): each link opens its own
+                // target, `<hostnames>` (GROUP) the scope sites and `<websites>`
+                // (PROVIDER) the Consent Framework site with its `ui:sites` click. A
+                // text without a link (LOCAL, DOMAIN, APP) has nothing tappable — what
+                // FRONT-1286 ensured, now carried by the segments themselves.
+                BannerTextView(
+                    segments: uiState.scopeReminderSegments,
+                    fallback: scope,
+                    theme: theme,
+                    onNavigate: nil,
+                    onUiClick: onUiClick,
+                    localize: localize,
+                    hostnames: uiState.hostnames
+                )
             }
         }
         .padding(.horizontal, 16)

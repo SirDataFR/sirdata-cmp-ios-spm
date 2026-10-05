@@ -27,6 +27,12 @@ struct BannerButton: View {
     /// (buttons.less `.btnContent { border-radius: calc(var(--border-radius) / 2) }`).
     private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: theme.cornerRadius / 2) }
 
+    /// 8 pt, the vertical content padding of a Material button on Android. The caller fixes the
+    /// height at 63 pt: with 12 pt the label had 39 pt, one point short of two lines of
+    /// `.subheadline`, so SwiftUI truncated a long refusal label (« Continuer sans acce… ») instead
+    /// of wrapping it. 47 pt holds two lines.
+    private static let verticalPadding: CGFloat = 8
+
     // NOTE (hit area): all decoration (frame/padding/background/overlay) lives
     // INSIDE the `Button` label, followed by `.contentShape`, so the whole
     // visible button surface — including the caller-assigned fixed height —
@@ -37,7 +43,7 @@ struct BannerButton: View {
             Button(action: action) {
                 labelText(color: theme.onMain, weight: .semibold)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, Self.verticalPadding)
                     .background((isPrimary ? theme.main : theme.main.opacity(0.7)))
                     .clipShape(shape)
                     .contentShape(shape)
@@ -49,7 +55,7 @@ struct BannerButton: View {
             Button(action: action) {
                 labelText(color: theme.text, weight: .semibold)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, Self.verticalPadding)
                     .background(theme.text.opacity(0.15))
                     .clipShape(shape)
                     .contentShape(shape)
@@ -61,7 +67,7 @@ struct BannerButton: View {
             Button(action: action) {
                 labelText(color: theme.main, weight: .medium)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, Self.verticalPadding)
                     .overlay(shape.stroke(theme.main, lineWidth: 1))
                     .contentShape(shape)
             }
@@ -73,18 +79,6 @@ struct BannerButton: View {
                 labelText(color: theme.main, weight: .medium)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(.vertical, 8)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(label)
-
-        case .close:
-            Button(action: action) {
-                Text(label)
-                    .font(.footnote)
-                    .foregroundColor(theme.text.opacity(0.6))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.vertical, 6)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)

@@ -33,11 +33,11 @@ struct PurposesView: View {
     let onAcceptAll: () -> Void
     let onRejectAll: () -> Void
     let onSave: () -> Void
+    /// FRONT-1409 — the `ui:sites` click of the « voir les sites » link of Text2.
+    var onUiClick: ((UserActionUi) -> Void)? = nil
 
     @Environment(\.cmpResolvedTheme) private var theme
     @State private var showActivitiesHelp = false
-    /// GAP-05: Hostnames modal state (web parity: Text2.jsx hostnames link).
-    @State private var showHostnamesSheet = false
 
     private var screen: PurposesScreenModel { uiState.purposesScreen }
 
@@ -148,10 +148,22 @@ struct PurposesView: View {
                 .font(.subheadline)
                 .foregroundColor(theme.text.opacity(0.85))
 
-            // GAP-05: Web parity — render Text2 with clickable hostnames links.
+            // GAP-05 / FRONT-1409: web parity (`purposes/Text2.jsx`) — every link of
+            // Text2 opens its own target: `<hostnames>` the scope sites (GROUP),
+            // `<websites>` the Consent Framework site with its `ui:sites` click
+            // (PROVIDER). Vendors/purposes links have no target on this screen.
             let text2Segments = processPurposesText2Segments(localize.getText(key: LocaleKey.purposesText2.key))
             if !text2Segments.isEmpty {
-                text2View(text2Segments)
+                BannerTextView(
+                    segments: text2Segments,
+                    // Never read: the call is guarded by `!text2Segments.isEmpty`.
+                    fallback: "",
+                    theme: theme,
+                    onNavigate: nil,
+                    onUiClick: onUiClick,
+                    localize: localize,
+                    hostnames: uiState.hostnames
+                )
             }
 
             if !uiState.privacyPolicyUrl.isEmpty, let url = URL(string: uiState.privacyPolicyUrl) {
@@ -303,34 +315,5 @@ struct PurposesView: View {
         let maxAgeText = getDurationFromDays(uiState.maxAgeDays, localize: localize)
         let withMaxAge = withScope.replacingOccurrences(of: "<maxAge/>", with: maxAgeText)
         return withMaxAge.processClassnameTagsStructured(setChoicesStyle: uiState.choicesStyle)
-    }
-
-    /// GAP-05: Renders Text2 segments with clickable hostnames links.
-    /// HOSTNAMES segments open a modal sheet listing uiState.hostnames.
-    @ViewBuilder
-    private func text2View(_ segments: [(text: String, linkType: String?)]) -> some View {
-        let hasHostnamesLink = segments.contains { $0.linkType == "HOSTNAMES" }
-        let plainText = segments.map { $0.text }.joined()
-        if hasHostnamesLink {
-            Text(plainText)
-                .font(.subheadline)
-                .foregroundColor(theme.text.opacity(0.85))
-                .onTapGesture {
-                    showHostnamesSheet = true
-                }
-                .sheet(isPresented: $showHostnamesSheet) {
-                    HostnamesSheet(
-                        hostnames: uiState.hostnames,
-                        utiqNoticeUrl: nil,
-                        localize: localize,
-                        theme: theme
-                    )
-                    .cmpPresentationDetents(medium: true)
-                }
-        } else {
-            Text(plainText)
-                .font(.subheadline)
-                .foregroundColor(theme.text.opacity(0.85))
-        }
     }
 }

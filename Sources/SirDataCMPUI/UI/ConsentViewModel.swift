@@ -137,9 +137,6 @@ class ConsentViewModel: ObservableObject {
         // Recorded from `ConsentView.onAppear`, not here: building a `StateObject` is
         // not showing a banner. See `recordManualPromptIfNeeded()`.
 
-        // Auto-attach consent adapter forwarder for native SDK forwarding
-        ConsentAdapterForwarder.shared.autoAttachWhenReady()
-
         // Observe state changes. Watchers collect the Kotlin StateFlows on the
         // main dispatcher (see FlowWatcher.kt in iosMain).
         // Kotlin enums are exported as classes: compare with `==` instead of
@@ -285,8 +282,8 @@ class ConsentViewModel: ObservableObject {
         // pas ne masque plus le provider de son jumeau Sirdata, qui redevient une ligne.
         let countedHiddenProviderIds: Set<Int> = Set(sl.vendors.compactMap { sv -> Int? in
             guard sv.googleProviderId != nil, sv.tcfVendorId != nil else { return nil }
-            let googleId = Int(sv.googleProviderId!)
-            let tcfId = Int(sv.tcfVendorId!)
+            let googleId = Int(truncating: sv.googleProviderId!)
+            let tcfId = Int(truncating: sv.tcfVendorId!)
             guard decidableVendors.contains(where: { Int($0.id) == tcfId && $0.deletedDate == nil }),
                   gp.providers.contains(where: { Int($0.id) == googleId })
             else { return nil }
@@ -295,8 +292,8 @@ class ConsentViewModel: ObservableObject {
 
         var partnerCount = decidableVendors.count + (gp.providers.count - countedHiddenProviderIds.count) + sl.vendors.count
             - sl.vendors.filter { sv in
-                let hasTcfMatch: Bool = sv.tcfVendorId != nil && decidableVendors.contains { Int($0.id) == Int(sv.tcfVendorId!) && $0.deletedDate == nil }
-                let hasGoogleMatch: Bool = sv.googleProviderId != nil && gp.providers.contains { Int($0.id) == Int(sv.googleProviderId!) }
+                let hasTcfMatch: Bool = sv.tcfVendorId != nil && decidableVendors.contains { Int($0.id) == Int(truncating: sv.tcfVendorId!) && $0.deletedDate == nil }
+                let hasGoogleMatch: Bool = sv.googleProviderId != nil && gp.providers.contains { Int($0.id) == Int(truncating: sv.googleProviderId!) }
                 return hasTcfMatch || hasGoogleMatch
             }.count
             + customPurposes.filter { !($0.vendor?.name.isEmpty ?? true) }.count
@@ -415,8 +412,12 @@ class ConsentViewModel: ObservableObject {
                 .processClassnameTags(setChoicesStyle: choicesStyle)
         }
 
-        func processTextSegments(_ key: LocaleKey) -> [(text: String, linkType: String?)] {
-            let raw = localize.getText(key: key.key)
+        // `key` only steers the two banner-specific branches below (`text1`, `text4`):
+        // any other text — e.g. the partners screen scope reminder (FRONT-1409) — goes
+        // through the banner pipeline unchanged.
+        func processRawTextSegments(_ raw: String, key: LocaleKey?) -> [(text: String, linkType: String?)] {
+            let isText1 = key.map { $0 == LocaleKey.text1 } ?? false
+            let isText4 = key.map { $0 == LocaleKey.text4 } ?? false
             return raw
                 .processConditionalTags(
                     purposeIds: purposeIds,
@@ -433,7 +434,7 @@ class ConsentViewModel: ObservableObject {
                     // il faut les DEUX : `text1` traverse les deux pipelines (`data.text1` et
                     // `data.text1Segments`), donc n'en corriger qu'un laisserait le bandeau
                     // faux dans la moitié des rendus, selon qu'il porte un lien ou non.
-                    scopeKey: key == .text1 ? bannerScopeTextKey : scopeTextKey,
+                    scopeKey: isText1 ? bannerScopeTextKey : scopeTextKey,
                     maxAgeDays: maxAgeDays,
                     isApplyWorkflow: uiState.workflow == .applyChoices,
                     noConsentButton: noConsentButtonStr,
@@ -445,7 +446,7 @@ class ConsentViewModel: ObservableObject {
                     isManualDisplay: uiState.workflow == .manualDisplay,
                     // FRONT-1283 : TEXT4 résout `<actors/>` depuis `text4.partner*`,
                     // les autres textes depuis `mode.*.partner*`.
-                    isText4Mode: key == .text4
+                    isText4Mode: isText4
                 )
                 .processConditionalTags(
                     purposeIds: purposeIds,
@@ -456,6 +457,10 @@ class ConsentViewModel: ObservableObject {
                     hasUtiq: hasUtiq
                 )
                 .processClassnameTagsStructured(setChoicesStyle: choicesStyle)
+        }
+
+        func processTextSegments(_ key: LocaleKey) -> [(text: String, linkType: String?)] {
+            processRawTextSegments(localize.getText(key: key.key), key: key)
         }
 
         let isApplyWorkflow = uiState.workflow == .applyChoices
@@ -559,6 +564,9 @@ class ConsentViewModel: ObservableObject {
         data.text1Segments = processTextSegments(.text1)
         data.text2Segments = processTextSegments(.text2)
         data.text3Segments = processTextSegments(text3Key)
+        // FRONT-1409 — the partners screen scope reminder with its links, so each one
+        // opens its own target (web parity: `VendorScope.jsx` renders it through `buildText`).
+        data.scopeReminderSegments = processRawTextSegments(localize.getText(key: scopeKey), key: nil)
         return data
     }
 
@@ -1667,6 +1675,7 @@ class ConsentViewModel: ObservableObject {
         newState.customPurposes = sd.customPurposes
         newState.privacyPolicyUrl = sd.privacyPolicyUrl
         newState.scopeReminderKey = sd.scopeReminderKey
+        newState.scopeReminderSegments = sd.scopeReminderSegments
         newState.hostnames = sd.hostnames
         newState.utiqActive = sd.utiqActive
         newState.utiqNoticeUrl = sd.utiqNoticeUrl
@@ -2816,6 +2825,16 @@ class ConsentViewModel: ObservableObject {
     func reportUiNavigation(to screen: ConsentScreen) {
         let from = uiState.currentScreen
         Task { try? await cmp.postUiNavigation(from: from, to: screen) }
+    }
+
+    /// Remonte `response:close` — la croix du bandeau qui ne persiste RIEN, FRONT-1480.
+    ///
+    /// Parité web : `Main.handleClose` (hors variante CNIL) émet `response:close` PUIS
+    /// `ui:close`. Sans ce hit, chaque fermeture comptait un clic terminal sans réponse et
+    /// faussait `PartnerStatDataQuality` de +1. Même chemin que l'Android
+    /// (`ConsentActions.onCloseDismissing`).
+    func reportCloseResponse() {
+        Task { try? await cmp.postCloseResponse() }
     }
 
     /// Remonte la FERMETURE de l'écran US — `ccpa_response:close`, FRONT-1404.

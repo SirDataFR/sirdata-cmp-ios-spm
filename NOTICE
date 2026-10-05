@@ -6,10 +6,10 @@
 ===============================================================================
 
 Product:        Sirdata CMP Mobile SDK — iOS
-Version:        1.2.0
+Version:        2.0.0
 Publisher:      Sirdata SAS, 20 rue Saint-Fiacre, 75002 Paris, France
-Date of issue:  2026-09-04
-Distribution:   CocoaPods (SirDataCMP), Swift Package Manager
+Date of issue:  2026-10-02
+Distribution:   CocoaPods (SirdataCMP), Swift Package Manager
                 (SirDataFR/sirdata-cmp-ios-spm), npm
                 (@sirdata/react-native-cmp, ios/ directory)
 
@@ -63,7 +63,7 @@ HOW THIS INVENTORY WAS ESTABLISHED
 ----------------------------------
 The components listed below were obtained by resolving the Gradle
 configuration `iosArm64CompileKlibraries` of the `:shared` module at version
-1.2.0. Versions shown are the RESOLVED versions after Gradle conflict
+2.0.0. Versions shown are the RESOLVED versions after Gradle conflict
 arbitration, not the declared versions. Where arbitration occurred it is
 noted in the entry.
 

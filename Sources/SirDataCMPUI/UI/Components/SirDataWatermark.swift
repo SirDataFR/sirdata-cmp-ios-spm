@@ -2,11 +2,13 @@ import SwiftUI
 
 /// Small watermark rendered at the bottom of the consent UI.
 ///
-/// The config delivers the watermark as a CSS-style value: either plain text
-/// or an image data URI (`url(data:image/png;base64,...)`). Raster data URIs
-/// are decoded and shown as an image; plain text is shown as a faint label;
-/// non-decodable data URIs (e.g. SVG) render nothing rather than leaking raw
-/// base64. Automatically hidden when `whiteLabel` is enabled.
+/// The config delivers the watermark as a CSS image value
+/// (`url(data:image/png;base64,...)`). Raster data URIs are decoded and shown
+/// as an image; anything else renders NOTHING. The web writes this value into a
+/// CSS image property, so it never shows it as text either: the plain-text
+/// branch that lived here printed the word `NONE` (the console's "no image") or
+/// a hosted `url(https://…)` as text. Automatically hidden when `whiteLabel` is
+/// enabled.
 ///
 /// Mirrors Android's `SirDataWatermark` composable.
 struct SirDataWatermark: View {
@@ -22,10 +24,9 @@ struct SirDataWatermark: View {
 
     @ViewBuilder
     private var content: some View {
-        let raw = theme.watermarkRaw
-        if raw.isEmpty {
-            EmptyView()
-        } else if let image = theme.watermarkImage {
+        // `watermarkImage` is nil for an empty value and for a data URI that
+        // couldn't be decoded (e.g. SVG): both render nothing.
+        if let image = theme.watermarkImage {
             HStack {
                 Spacer()
                 Image(uiImage: image)
@@ -36,19 +37,6 @@ struct SirDataWatermark: View {
                 Spacer()
             }
             .padding(.vertical, 8)
-        } else if !raw.contains("data:image/") {
-            // Plain-text watermark.
-            HStack {
-                Spacer()
-                Text(raw)
-                    .font(.caption2)
-                    .foregroundColor(theme.text.opacity(0.4))
-                Spacer()
-            }
-            .padding(.vertical, 8)
-        } else {
-            // Data URI that couldn't be decoded (e.g. SVG): render nothing.
-            EmptyView()
         }
     }
 }

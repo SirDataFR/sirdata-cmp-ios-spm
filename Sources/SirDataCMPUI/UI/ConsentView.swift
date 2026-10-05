@@ -32,6 +32,8 @@ public struct ConsentView: View {
     /// deep-link straight into the preferences screen). nil = main banner.
     let initialScreen: ConsentScreen?
     @State private var didApplyInitialScreen = false
+    /// Set by `finish()`, the exit every gesture of ours goes through (FRONT-1408).
+    @State private var didExit = false
 
     /// - Parameters:
     ///   - onFinish: called when the user is done with the banner.
@@ -105,6 +107,10 @@ public struct ConsentView: View {
             // settings screen had merely been constructed (Codex, P2).
             viewModel.recordManualPromptIfNeeded()
         }
+        // FRONT-1408 — the host owns the presentation (`.sheet`), so a swipe-down
+        // never goes through our code. The only thing the SDK can see is the view
+        // leaving the screen without having taken one of its own exits.
+        .onDisappear { reportHostDismissalIfNeeded() }
     }
 
     private func applyInitialScreenIfNeeded(isLoading: Bool) {
@@ -193,7 +199,8 @@ public struct ConsentView: View {
                 onViewPartners: { navigateReported(to: ConsentScreen.vendors) },
                 onAcceptAll: { acceptAll() },
                 onRejectAll: { rejectAll() },
-                onSave: { save(UserActionUi.save) }
+                onSave: { save(UserActionUi.save) },
+                onUiClick: { viewModel.reportUiClick($0) }
             )
         } else if screen == ConsentScreen.vendors || screen == ConsentScreen.vendorsMissing {
             VendorsView(
@@ -205,7 +212,8 @@ public struct ConsentView: View {
                 onAcceptAll: { acceptAll() },
                 onRejectAll: { rejectAll() },
                 onSave: { save(UserActionUi.save) },
-                onClose: { closeDismissing() }
+                onClose: { closeDismissing() },
+                onUiClick: { viewModel.reportUiClick($0) }
             )
         } else {
             // MAIN and MAIN_MISSING (and any unknown screen): banner over scrim.
@@ -242,6 +250,19 @@ public struct ConsentView: View {
                 // Web parity: the banner card takes the configured radius as-is
                 // (layout.less `.wrapper { border-radius: var(--border-radius) }`).
                 .clipShape(BannerCardShape(position: theme.position, radius: theme.cornerRadius))
+                // Feuille du bas : le fond de la carte descend sous la barre d'accueil, le contenu
+                // reste au-dessus. Sans ça, la carte s'arrêtait au bord de la zone sûre et
+                // laissait voir le voile sur ~34 pt : une carte qui paraissait coupée net. Même
+                // forme que la carte, sinon ses coins arrondis du haut seraient comblés. Parité
+                // Android, où la feuille touche la barre de navigation ; le web, lui, laisse une
+                // marge tout autour de la carte (`layout.less`, `@modal-margin-mobile`).
+                .background(alignment: .bottom) {
+                    if isBottomSheet(theme.position) {
+                        BannerCardShape(position: theme.position, radius: theme.cornerRadius)
+                            .fill(theme.background)
+                            .ignoresSafeArea(.container, edges: .bottom)
+                    }
+                }
                 .padding(bannerPadding(theme.position))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -255,6 +276,12 @@ public struct ConsentView: View {
         if position == ThemePosition.bottomLeft { return .bottomLeading }
         if position == ThemePosition.bottomRight { return .bottomTrailing }
         return .bottom
+    }
+
+    /// Les positions où la carte est une feuille collée au bas de l'écran : celles dont
+    /// `BannerCardShape` arrondit les coins du haut.
+    private func isBottomSheet(_ position: ThemePosition) -> Bool {
+        position != ThemePosition.center && position != ThemePosition.top
     }
 
     private func bannerPadding(_ position: ThemePosition) -> EdgeInsets {
@@ -370,7 +397,11 @@ public struct ConsentView: View {
     /// `Main.handleClose` du web émet `CLOSE` dans ses DEUX branches. Le report ne peut pas
     /// vivre dans [finish], qui est aussi le point de sortie d'un enregistrement réussi : y
     /// poser le hit ferait suivre chaque « Tout accepter » d'un `ui:close` fantôme.
+    ///
+    /// Comme le web, la réponse `response:close` est appelée avant le clic (sur le web, elle ne
+    /// part qu'après `yieldToPaint()`, donc après le clic sur le réseau) — FRONT-1480.
     private func closeDismissing() {
+        viewModel.reportCloseResponse()
         viewModel.reportUiClick(UserActionUi.close)
         finish()
     }
@@ -400,8 +431,38 @@ public struct ConsentView: View {
     }
 
     private func finish() {
-        IosCMPManager.shared.notifyBannerClosed()
+        // A swipe-down may have closed the banner while a save was in flight: the
+        // UI-closed event has then already been fired.
+        if !didExit { IosCMPManager.shared.notifyBannerClosed() }
+        didExit = true
         onFinish()
+    }
+
+    /// The host closed the banner (swipe-down on its sheet) — FRONT-1408.
+    ///
+    /// Same report as the cross that persists NOTHING (`response:close` then `ui:close`,
+    /// or `ccpa_response:close` on the US screen), never the CNIL saving cross: a
+    /// dismissal gesture is not a recognised way of refusing (FRONT-1355). Nothing is
+    /// persisted, so the banner shows again on the next launch — exactly as before, only
+    /// now it is counted.
+    ///
+    /// Chosen over `interactiveDismissDisabled()`, which would change the host's sheet.
+    /// Known limit: any removal of `ConsentView` from the screen without one of our exits
+    /// counts as a close — e.g. a host that pushes another view over it.
+    private func reportHostDismissalIfNeeded() {
+        guard !didExit, !viewModel.uiState.isLoading, viewModel.theme != nil else { return }
+        didExit = true
+        if viewModel.uiState.usNat != nil {
+            viewModel.reportCcpaClose()
+        } else {
+            // FRONT-1480 — the same pair as the cross (`closeDismissing`), Android's system back
+            // and the web's Escape key (`App.onEscape`), called in the same order as those
+            // handlers. This is not a network order: the web posts `response:close` after
+            // `yieldToPaint()`, so after the click.
+            viewModel.reportCloseResponse()
+            viewModel.reportUiClick(UserActionUi.close)
+        }
+        IosCMPManager.shared.notifyBannerClosed()
     }
 }
 

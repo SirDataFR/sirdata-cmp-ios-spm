@@ -16,6 +16,38 @@ struct CmpTheme: ViewModifier {
             // same colors / radius / text scale (mirrors Android's
             // CompositionLocalProvider in CmpTheme.kt).
             .environment(\.cmpResolvedTheme, resolved)
+            // FRONT-1363 — the publisher's text size (`theme.textSize`). Applied
+            // here, at the one place every screen goes through, by shifting the
+            // user's Dynamic Type size one step instead of replacing it: 117 of
+            // the 119 fonts of the package are semantic and must keep following
+            // the system accessibility setting.
+            .modifier(CmpTextSizeShift(step: resolved.textSizeStep))
+    }
+}
+
+/// Shifts the inherited Dynamic Type size by `step` (-1 small, 0 medium, +1 big).
+///
+/// `DynamicTypeSize` is iOS 15+, the package minimum on every channel (podspecs
+/// and `Package.swift`) — so no availability guard.
+struct CmpTextSizeShift: ViewModifier {
+    let step: Int
+    /// The size inherited from above this modifier — the user's own setting.
+    @Environment(\.dynamicTypeSize) private var inherited
+
+    func body(content: Content) -> some View {
+        content.dynamicTypeSize(step == 0 ? inherited : inherited.cmpShifted(by: step))
+    }
+}
+
+extension DynamicTypeSize {
+    /// The whole scale, built once rather than on every render.
+    private static let cmpScale = Array(DynamicTypeSize.allCases)
+
+    /// The size `step` notches away, clamped to the ends of the scale.
+    func cmpShifted(by step: Int) -> DynamicTypeSize {
+        let all = DynamicTypeSize.cmpScale
+        guard let index = all.firstIndex(of: self) else { return self }
+        return all[Swift.min(Swift.max(index + step, 0), all.count - 1)]
     }
 }
 
@@ -61,7 +93,10 @@ struct ResolvedTheme {
 
     // Layout / typography
     let cornerRadius: CGFloat
-    let textScale: CGFloat
+    /// Publisher text size as a Dynamic Type shift: -1 small, 0 medium, +1 big
+    /// (FRONT-1363). One notch is ~6-12 % depending on the size, the closest
+    /// iOS gets to the web's ±1 px on 13 px (~7.7 %) without fixed font sizes.
+    let textSizeStep: Int
     let position: ThemePosition
     let whiteLabel: Bool
     let closeButton: Bool
@@ -88,7 +123,7 @@ struct ResolvedTheme {
             border = Color(hex: "#E5E7EB", fallback: Color(.separator))
             overlay = Color.black.opacity(0.5)
             cornerRadius = 12 // Kotlin Theme() default = ThemeBorderRadius.AVERAGE
-            textScale = 1.0
+            textSizeStep = 0
             position = .bottom
             whiteLabel = false
             closeButton = false
@@ -110,8 +145,14 @@ struct ResolvedTheme {
         text = Color(hex: mode.textColor, fallback: .secondary)
         border = Color(hex: mode.borderColor, fallback: Color(.separator))
         overlay = Color(hex: mode.overlayColor, fallback: Color.black.opacity(0.5))
-        logoRaw = mode.logo
-        watermarkRaw = mode.watermark
+        // Images : la règle du web, portée par `Utils.resolveTheme` (symbole déjà dans le binaire).
+        // `NONE` vaut « aucune image », et une image vide du mode sombre reprend celle du mode
+        // clair. Lire `mode.watermark` brut affichait le mot `NONE` en filigrane avec 1020/hmDnl
+        // en mode sombre. Les couleurs, elles, restent choisies par `resolveMode` ci-dessus.
+        let images = Utils.shared.resolveTheme(theme: theme)
+        let imageMode = isDark ? images.darkMode : images.lightMode
+        logoRaw = imageMode.logo
+        watermarkRaw = imageMode.watermark
 
         // Kotlin enums export as classes — compare with `==` on case instances.
         // Scale = web's borderRadiusMap (App.jsx:60-65), the CSS `--border-radius`
@@ -124,9 +165,9 @@ struct ResolvedTheme {
         else { cornerRadius = 12 } // average / default
 
         let size = theme.textSize
-        if size == ThemeTextSize.small { textScale = 0.85 }
-        else if size == ThemeTextSize.big { textScale = 1.15 }
-        else { textScale = 1.0 } // medium / default
+        if size == ThemeTextSize.small { textSizeStep = -1 }
+        else if size == ThemeTextSize.big { textSizeStep = 1 }
+        else { textSizeStep = 0 } // medium / default
 
         position = theme.position
         whiteLabel = theme.whiteLabel

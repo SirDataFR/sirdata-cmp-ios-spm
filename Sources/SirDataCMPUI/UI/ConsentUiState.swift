@@ -75,6 +75,9 @@ struct ConsentUiState {
     var privacyPolicyUrl: String = ""
     /// Locale key for the scope reminder text on the partners screen (vendors.scope.*).
     var scopeReminderKey: String = "vendors.scope.local"
+    /// FRONT-1409 — the scope reminder as link segments: `<hostnames>` (GROUP) and
+    /// `<websites>` (PROVIDER) each open their own target, as on the web.
+    var scopeReminderSegments: [(text: String, linkType: String?)] = []
 
     /// Hostnames the CMP scope applies to (from config.context.hostnames). Shown in the hostnames modal.
     var hostnames: [String] = []
@@ -326,6 +329,9 @@ struct ConsentStaticData {
     var disableTcf: Bool = false
     var privacyPolicyUrl: String = ""
     var scopeReminderKey: String = "vendors.scope.local"
+    /// FRONT-1409 — the scope reminder as link segments: `<hostnames>` (GROUP) and
+    /// `<websites>` (PROVIDER) each open their own target, as on the web.
+    var scopeReminderSegments: [(text: String, linkType: String?)] = []
     var hostnames: [String] = []
     var utiqActive: Bool = false
     var utiqNoticeUrl: String = ""

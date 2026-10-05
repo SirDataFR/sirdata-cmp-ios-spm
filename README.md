@@ -4,7 +4,7 @@ A Swift Package of the Sirdata CMP iOS SDK — an IAB TCF v2.2 (CMP ID 92), GPP 
 
 ## Requirements
 
-- iOS 14.0+
+- iOS 15.0+
 - Xcode 15+
 - Swift 5.9+
 
@@ -19,7 +19,7 @@ https://github.com/SirDataFR/sirdata-cmp-ios-spm
 Or add it to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm", from: "1.2.0")
+.package(url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm", from: "2.0.0")
 ```
 
 The package ships one product, `SirDataCMP`, containing two modules:

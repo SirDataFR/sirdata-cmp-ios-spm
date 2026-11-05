@@ -24,16 +24,20 @@ import UIKit
 /// **Important**: Call `IosCMPApi.shared.notifyBannerShown()` before presenting
 /// to fire the `cmpuishown` event per IAB TCF spec. `notifyBannerClosed()` is
 /// fired automatically when this view finishes.
+///
+/// The view always offers a way out, whatever the presentation (a `.sheet` with
+/// `.interactiveDismissDisabled()`, a UIKit `.overFullScreen`): when the SDK is not
+/// initialized, or when the configuration could not be loaded (offline first launch,
+/// unknown config ID), it shows a message and a Close button that calls `onFinish`.
 public struct ConsentView: View {
-    @StateObject private var viewModel: ConsentViewModel
-    @Environment(\.colorScheme) private var colorScheme
     let onFinish: () -> Void
-    /// Optional screen to open once the CMP is loaded (e.g. `.purposes` to
-    /// deep-link straight into the preferences screen). nil = main banner.
     let initialScreen: ConsentScreen?
-    @State private var didApplyInitialScreen = false
-    /// Set by `finish()`, the exit every gesture of ours goes through (FRONT-1408).
-    @State private var didExit = false
+    let workflow: Workflow?
+    /// Read ONCE, when SwiftUI installs the view. Building the banner needs an initialized
+    /// SDK — `ConsentViewModel.init` calls `IosCMPManager.get()`, which throws, and a Kotlin
+    /// exception terminates the app. Freezing the answer keeps the view from swapping to a
+    /// banner half-way if the host initializes while it is on screen.
+    @State private var sdkInitialized = IosCMPApi.shared.isInitialized()
 
     /// - Parameters:
     ///   - onFinish: called when the user is done with the banner.
@@ -49,6 +53,41 @@ public struct ConsentView: View {
     ) {
         self.onFinish = onFinish
         self.initialScreen = initialScreen
+        self.workflow = workflow
+    }
+
+    public var body: some View {
+        if sdkInitialized {
+            ConsentContentView(onFinish: onFinish, initialScreen: initialScreen, workflow: workflow)
+        } else {
+            // No SDK, so no locale either: the fallback English label, like `errorView`.
+            ConsentUnavailableView(closeLabel: "Close") {
+                IosCMPManager.shared.notifyBannerClosed()
+                onFinish()
+            }
+        }
+    }
+}
+
+/// The banner itself, once the SDK is known to be initialized — see `ConsentView`.
+private struct ConsentContentView: View {
+    @StateObject private var viewModel: ConsentViewModel
+    @Environment(\.colorScheme) private var colorScheme
+    let onFinish: () -> Void
+    /// Optional screen to open once the CMP is loaded (e.g. `.purposes` to
+    /// deep-link straight into the preferences screen). nil = main banner.
+    let initialScreen: ConsentScreen?
+    @State private var didApplyInitialScreen = false
+    /// Set by `finish()`, the exit every gesture of ours goes through (FRONT-1408).
+    @State private var didExit = false
+
+    init(
+        onFinish: @escaping () -> Void,
+        initialScreen: ConsentScreen?,
+        workflow: Workflow?
+    ) {
+        self.onFinish = onFinish
+        self.initialScreen = initialScreen
         _viewModel = StateObject(wrappedValue: ConsentViewModel(workflow: workflow))
     }
 
@@ -56,15 +95,20 @@ public struct ConsentView: View {
         ResolvedTheme(theme: viewModel.theme, colorScheme: colorScheme)
     }
 
-    public var body: some View {
+    var body: some View {
         Group {
-            // `theme == nil` means the publisher config hasn't loaded yet — show
-            // a neutral spinner rather than the default-blue banner, so the UI
-            // never flashes an unbranded placeholder before the real CMP appears.
-            if viewModel.uiState.isLoading || viewModel.theme == nil {
-                ProgressView()
-                    .cmpTint(.secondary)
-                    .accessibilityLabel("Loading consent options")
+            // A neutral spinner while the publisher config loads, rather than the
+            // default-blue banner, so the UI never flashes an unbranded placeholder
+            // before the real CMP appears.
+            if viewModel.uiState.isLoading {
+                ConsentLoadingView(closeLabel: closeLabel) { finish() }
+            } else if viewModel.theme == nil {
+                // Loading is over and there is still no config: initialization failed
+                // (offline first launch, unknown config ID), and nothing retries it in this
+                // session. This used to be the spinner above, with no way out: the only exit
+                // was swiping the host's sheet, impossible with `.interactiveDismissDisabled()`
+                // or a full-screen presentation such as the React Native bridge's.
+                ConsentUnavailableView(closeLabel: closeLabel) { finish() }
             } else if let error = viewModel.uiState.error, viewModel.uiState.currentScreen == ConsentScreen.main {
                 errorView(message: error)
             } else {
@@ -111,6 +155,11 @@ public struct ConsentView: View {
         // never goes through our code. The only thing the SDK can see is the view
         // leaving the screen without having taken one of its own exits.
         .onDisappear { reportHostDismissalIfNeeded() }
+    }
+
+    /// The Close label from the locales, with the built-in English fallback while they load.
+    private var closeLabel: String {
+        viewModel.getLocalize().getText(key: LocaleKey.buttonsClose.key)
     }
 
     private func applyInitialScreenIfNeeded(isLoading: Bool) {
@@ -449,9 +498,17 @@ public struct ConsentView: View {
     /// Chosen over `interactiveDismissDisabled()`, which would change the host's sheet.
     /// Known limit: any removal of `ConsentView` from the screen without one of our exits
     /// counts as a close — e.g. a host that pushes another view over it.
+    ///
+    /// While loading, or without a configuration, no banner was shown: no hit, only the IAB
+    /// `cmpuiclosed` event, which answers the host's `notifyBannerShown()` — Android's
+    /// `ConsentActivity.onDestroy` fires it on every close too.
     private func reportHostDismissalIfNeeded() {
-        guard !didExit, !viewModel.uiState.isLoading, viewModel.theme != nil else { return }
+        guard !didExit else { return }
         didExit = true
+        guard !viewModel.uiState.isLoading, viewModel.theme != nil else {
+            IosCMPManager.shared.notifyBannerClosed()
+            return
+        }
         if viewModel.uiState.usNat != nil {
             viewModel.reportCcpaClose()
         } else {
@@ -463,6 +520,75 @@ public struct ConsentView: View {
             viewModel.reportUiClick(UserActionUi.close)
         }
         IosCMPManager.shared.notifyBannerClosed()
+    }
+}
+
+/// The spinner shown while the configuration loads, with a Close button after a few seconds.
+///
+/// Offline, initialization fails fast and `ConsentUnavailableView` takes over. A network that
+/// answers slowly, or not at all, keeps this spinner up for as long as the HTTP timeouts —
+/// several tens of seconds over the three requests — and nothing else lets the user leave a
+/// full-screen presentation. The delay keeps the button off a normal load, which takes about
+/// a second.
+private struct ConsentLoadingView: View {
+    let closeLabel: String
+    let onClose: () -> Void
+    @State private var showsClose = false
+
+    private static let closeDelayNanoseconds: UInt64 = 5_000_000_000
+
+    var body: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .cmpTint(.secondary)
+                .accessibilityLabel("Loading consent options")
+            if showsClose {
+                Button(closeLabel, action: onClose)
+                    .buttonStyle(.bordered)
+            }
+        }
+        .task {
+            do {
+                try await Task.sleep(nanoseconds: Self.closeDelayNanoseconds)
+                showsClose = true
+            } catch {
+                // Cancelled: the view left the screen, or loading ended first.
+            }
+        }
+    }
+}
+
+/// What the view shows when there is no banner to show: SDK not initialized, or configuration
+/// not loaded. The text is English only — the locales come with the configuration that is
+/// missing, and the SDK bundles no other language.
+///
+/// A card on the system background: under a transparent full-screen presentation (the React
+/// Native bridge's) nothing else would sit behind the text.
+private struct ConsentUnavailableView: View {
+    let closeLabel: String
+    let onClose: () -> Void
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundColor(.secondary)
+                .accessibilityHidden(true)
+            Text("Privacy options could not be loaded. Check your connection and try again later.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            Button(closeLabel, action: onClose)
+                .buttonStyle(.bordered)
+        }
+        .padding(24)
+        .frame(maxWidth: 360)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(UIColor.systemBackground))
+                .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+        )
+        .padding(24)
     }
 }
 

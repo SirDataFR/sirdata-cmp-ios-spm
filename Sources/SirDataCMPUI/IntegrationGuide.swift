@@ -11,13 +11,13 @@
  * ### Swift Package Manager
  * Add the following to your `Package.swift`:
  * ```swift
- * .package(url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm", from: "2.0.0")
+ * .package(url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm", from: "2.1.0")
  * ```
  *
  * ### CocoaPods
  * Add to your `Podfile`:
  * ```ruby
- * pod 'SirdataCMP', '~> 2.0'
+ * pod 'SirdataCMP', '~> 2.1'
  * ```
  *
  * ## Integration Steps

@@ -50,8 +50,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "SirDataCMP",
-            url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm/releases/download/2.0.0/SirDataCMP-2.0.0.xcframework.zip",
-            checksum: "542939c03d457a23724014d7a7b530c86589e487cf6e2c58118a163ae634d5fe"
+            url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm/releases/download/2.1.0/SirDataCMP-2.1.0.xcframework.zip",
+            checksum: "65b5ce4ee7beeda5759f31a02f0a66877b2dfbac91bcc0a087cc1197d9971b15"
         ),
         .target(
             name: "SirDataCMPUI",

@@ -75,6 +75,15 @@ struct PurposesView: View {
                     // GAP-06: Web parity — Special Purposes and Features in
                     // separate sections after the support section (spec §1).
                     ForEach(screen.specialPurposeRows) { purposeRow($0) }
+                    // FRONT-1484 — TCF 2.4 : le texte standard des fonctionnalités précède la
+                    // première d'entre elles, et seulement s'il y en a une (parité web
+                    // `Purposes.jsx` : `features.length > 0 && <FeaturesStandardText/>`). Il a le
+                    // style d'intertitre de « En support de ces activités… », qui introduit lui
+                    // aussi une liste : écart voulu au web, où les deux phrases sont du texte
+                    // courant (docs/claude/interfaces-android-et-ios.md).
+                    if !screen.featureRows.isEmpty && !screen.featuresStandardText.isEmpty {
+                        sectionHeader(screen.featuresStandardText)
+                    }
                     ForEach(screen.featureRows) { purposeRow($0) }
                     Divider().padding(.vertical, 4)
                     // Consent storage mention (web parity: ConsentStorageMention).

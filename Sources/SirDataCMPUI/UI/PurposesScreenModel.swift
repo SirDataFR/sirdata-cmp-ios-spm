@@ -101,6 +101,10 @@ struct PurposesScreenModel: Equatable {
     var specialPurposeRows: [PurposeRowModel] = []
     var featureRows: [PurposeRowModel] = []
     var showActivitiesHeader: Bool = false
+    /// FRONT-1484 — TCF 2.4 : le texte standard des fonctionnalités, affiché juste avant la
+    /// première d'entre elles, son point final devenu le deux-points de la langue
+    /// (`FeaturesStandardText`, `shared`). Vide quand l'API ne le sert pas : rien ne s'affiche.
+    var featuresStandardText: String = ""
 }
 
 // MARK: - Toggles state (the ONLY thing a consent tap updates)

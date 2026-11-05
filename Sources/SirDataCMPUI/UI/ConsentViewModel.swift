@@ -1332,6 +1332,9 @@ class ConsentViewModel: ObservableObject {
                     consentVendors: featVendors
                 ))
             }
+            // FRONT-1484 — la règle vit dans `commonMain`, la même qu'Android : le texte
+            // standard des fonctionnalités, avec le deux-points de la langue.
+            model.featuresStandardText = FeaturesStandardText.shared.introduction(localize: localize)
         }
 
         return model

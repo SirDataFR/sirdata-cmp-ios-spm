@@ -19,7 +19,7 @@ https://github.com/SirDataFR/sirdata-cmp-ios-spm
 Or add it to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm", from: "2.0.0")
+.package(url: "https://github.com/SirDataFR/sirdata-cmp-ios-spm", from: "2.1.0")
 ```
 
 The package ships one product, `SirDataCMP`, containing two modules:
